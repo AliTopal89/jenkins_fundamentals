@@ -64,6 +64,20 @@ For example:
 java -jar jenkins.war --httpPort=8081 --prefix=/ci httpListenAddress=127.0.0.1
 ```  
 
+JENKINS_HOME directory structure
+  - config.xml - General configuration file
+  - jobs/ directory - Build job workspaces, hisory and artifacts.
+  - plugins/ directory - installed plugins
+  - users/ directory - local user databases
+
+**d. Artifacts are files which are associated with a single build. A jenkins build can have any number of artifacts associated with it**
+
+### Install Jenkins updates
+  - Download from "Manage Jenkins"
+  - Use "Prepare Shutdown" screen under "Manage Jenkins"
+  - Replace **jenkins.war** file usually on Linux this located in `/usr/share/jenkins`
+  - Restart jenkins and apply the upgrade 
+
 
 
 
