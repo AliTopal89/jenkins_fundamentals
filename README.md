@@ -42,3 +42,31 @@ Continuous Deployment
     ```java
     java -Xmx50m -Xms50m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -jar c:\javademos\demo\jfc\Java2D\Java2demo.jar
     ```
+    
+### Installing Jenkins and Running Jenkins
+
+- Settings are in `/etc/default/jenkins` or in `/etc/sysconfig/jenkins`
+- `$JENKINS_HOME` defaults to `/var/lib/jenkins`
+
+Web Application Archive (WAR) distribution of jenkins can be either 
+  - run as a stand-alone application 
+  - servlet container
+
+#### WAR as Standalone
+
+```java
+java ${JAVA_OPTS} -jar jenkins.war ${JENKINS_OPTS}
+// JENKINS_OPTS - httpPort, prefix, logfile etc.
+```
+For example:
+
+```java
+java -jar jenkins.war --httpPort=8081 --prefix=/ci httpListenAddress=127.0.0.1
+```  
+
+
+
+
+
+
+
