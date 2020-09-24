@@ -173,3 +173,19 @@ For Example:
 - **Service Lifecycle**
   - Managing options used to `/start/stop/reload`
 
+### Install Maven lab notes learned the hard way
+
+- install the jenkins.war file from previos lectures which looks like an example but it does need it seems like
+- Manage Jenkins -> Global Configuration and set JDK Installation with 
+  - `NAME` `ORACLE JDK8`
+  - `NAME` `ORACLE JDK7`
+  - Install automatically
+  - Git - `Path to git executable` `/usr/bin/git`
+  - Maven lab practive
+    - `NAME` `mvn3`, `Version 3.5.4`, Install automatically
+    - `NAME` `mvn2`, `Version 2.2.1`, Install automatically
+  - APPLY & SAVE
+
+Notes: You may have to install jenkins.war, from jenkins upgrades lecture.
+I didn't install the jenkins.war file from that lecture at first, once I installed that `java -jar ~/Downloads/jenkins.war httpListenAddress=http://localhost:5000/jenkins/`
+I was able to do maven project and free-style job works just fine. 
