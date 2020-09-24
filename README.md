@@ -73,13 +73,49 @@ JENKINS_HOME directory structure
 **d. Artifacts are files which are associated with a single build. A jenkins build can have any number of artifacts associated with it**
 
 ### Install Jenkins updates
+
   - Download from "Manage Jenkins"
   - Use "Prepare Shutdown" screen under "Manage Jenkins"
   - Replace **jenkins.war** file usually on Linux this located in `/usr/share/jenkins`
   - Restart jenkins and apply the upgrade 
 
+### Manage Jenkins
 
+- **Configure System** 
+  - most of the fundamental tools that Jenkins uses. Plugins may add sections to this page
 
+- **Number of executors**
+  - Unit of task execution on a computer
+  - Set this to `0` to prevent builds from running on master
+
+- **Quiet Period**
+  - When this option is non-zero, newly triggered builds of this project will be added to the queue, but Jenkins will wait for the specified period of time (in seconds) before actually starting the build.
+
+  - For example, if your builds take a long time to execute, you may want to prevent multiple source control commits that are made at approximately the same time from triggering multiple builds. Enabling the quiet period would prevent a build from being started as soon as Jenkins discovers the first commit;
+
+- **SCM and AUthentication**
+  - Git, SVN, Mercurial, Team Foundation Server... all use credentials plugin
+
+- **Timestamper**
+  - Systemtime format
+    - `'<b>'HH:mm:ss'</b> '`
+    - The system clock time format defines how the timestamps will be rendered. Default is like above
+  - Endtime Format
+    - The elapsed time format defines how the timestamps will be rendered when the elapsed time option has been selected.
+
+#### Global Tools Configuration
+
+For Example:
+
+- **Install JDK**
+  - Name	openjdk8
+ 	  JAVA_HOME	 /usr/lib/jvm/java-8-openjdk-amd64
+  - AUtomatic install asks for `Install Oracle Java SE Development Kit from the website`
+    - Select Java SE Development Kit installation 
+
+- **Reload config from Disk**
+  - Use this when you modify Jenkins or its environment outside of the UI
+ 
 
 
 
