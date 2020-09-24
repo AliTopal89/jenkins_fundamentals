@@ -115,8 +115,61 @@ For Example:
 
 - **Reload config from Disk**
   - Use this when you modify Jenkins or its environment outside of the UI
- 
 
+### Security
 
+- **Configure Global Security**
+  - Define how users are authenticated and what they are authorized to do.
 
+- **Manage Users Screen**
+  - is used to add user to the Jenkins user database and lists all users who are in the database
+
+- **Configure Credentials**
+  - Jenkins credentials control access to third party sites and applications such as artifact repos and cloud based storage
+
+- **Script Console**
+  - Allows you to execute arbitrary Groovy scripts on the server.
+  - Apache Groovy is the foundation of the DSL used for Jenkins Pipelines
+  - ```groovy
+       Jenkins.instance.queue.clear()
+    ```
+- **Manage Nodes**
+  - Recap of NODES, AGENTS & EXECUTORS:
+    - A `node` (e.g. jdk8-node) is a server where Jenkins runs jobs on `executors`
+    - The `agent` is the tool that manages the `executors` on a remote `node` on behalf of Jenkins.
+    - The Jenkins master also runs on a `node` 
+
+    - Click the flywheel to the right of the node to configure the items Jenkins monitors for all nodes it runs. 
+    - This is where you can also define the number of executors and other characteristics of the node. 
+
+- **Monitoring Node Usage**
+  - Load Statistics:
+    - page to monitor node utilization
+  - Number of online executors
+  - Number of busy executors
+  - Number of available executors
+  - Queue length
+
+  - *Note: The number of busy executors and the number of available executors* 
+  *need not necessarily be equal to the number of online executors as executors* 
+  *can be suspended from accepting builds and thus be neither busy nor available.*
+
+- **About Jenkins**
+  - Release and version of Jenkins running
+  - List of all third party libraries
+  - List of installed plugins
+
+- **System Information**
+  - provides detailed information with what is available on this Jenkins instance, for example"
+    - `java.version	1.8.0_212` - system
+    - `JAVA_HOME	/usr/lib/jvm/java-1.8-openjdk` -env 
+    - `gradle	1.36` - plugin
+
+- **Jenkins CLI**
+  - provides commands that perform functions that are usually executed using the GUI
+    - Available commands, for example:
+      - `java -jar jenkins-cli.jar -s http://localhost:5000/jenkins/ -webSocket help`
+
+- **Service Lifecycle**
+  - Managing options used to `/start/stop/reload`
 
