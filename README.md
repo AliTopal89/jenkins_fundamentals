@@ -189,3 +189,37 @@ For Example:
 Notes: You may have to install jenkins.war, from jenkins upgrades lecture.
 I didn't install the jenkins.war file from that lecture at first, once I installed that `java -jar ~/Downloads/jenkins.war httpListenAddress=http://localhost:5000/jenkins/`
 I was able to do maven project and free-style job works just fine. 
+
+
+### Jenkins Plugins
+
+What are Plugins?
+- A plugin is JAR file with some special conventions. Jenkins uses plugins to provide much of its functionality.
+This **"modular"** architecture means that your Jenkins installation has the features and functionality you need and not get
+bloated with functionality you don't need.
+
+- Contained in a fule with an hpi or jpi extension
+
+- Stored in `${JENKINS_HOME}/plugins` unless you use `--pluginroot` to change the binaries of the plugin
+- Plugins are versioned artifacts that can be upgraded
+
+- Installation Wizard will suggest plugins that provide commonly-used functionality.
+
+#### Manage Plugins
+
+- Installed Tab:
+  - Enabled - Check mark indicates that the plugin is enabled
+    - Greyed out check marks indicate plugins that are required by other plugins 
+    *(Always thought they were plugins installed/updated by Jenkins by default)*
+- Uninstall a plugin:
+  - Removes the plugin binary(hpi or jpi extension) from the disk
+  - Does not remove the configuration that the plugin may have created 
+    - If the plugin contributed extensions to any job/build/views/agents etc, Jenkins reports unrecognized
+    fragments in config files
+    - Until you remove the config file (config.xml) you can re-install the plugin and restart 
+    jenkins to restore the configurations.
+- Disable a plugin:
+  - softer way to retire a plugin, usually binary is changed to jpi/hpi.disabled
+- Update plugins:
+  - Always read the Changelog information of new plugins before installing it.
+  *(Yet Another Docker definitelly killed us at one point)*
