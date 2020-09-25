@@ -223,3 +223,28 @@ bloated with functionality you don't need.
 - Update plugins:
   - Always read the Changelog information of new plugins before installing it.
   *(Yet Another Docker definitelly killed us at one point)*
+
+*Click advanced on plugin manager if you are running under HTTP Proxy.*
+
+- Plugins can be installed manually without "Manage Plugins"
+  - The documentation for each plugin lists all dependencies, you would 
+  have to manually install optional dependencies though
+    - For Example click `Branch API` plugin, go to Dependencies tab 
+      - ```
+        Required
+        Folders ≥ 6.14
+        SCM API ≥ 2.6.3
+        *Implied*
+        Trilead API ≥ 1.0.4
+        ```
+  - Some plugins requie
+
+Note on Implied plugins:
+  - ```
+    Plugins that depend on a Jenkins core version before such a plugin was detached 
+    from core may or may not actually use any of its features. To ensure that 
+    plugins don't break whenever functionality they depend on is detached from Jenkins core, 
+    it is considered to have a dependency on the detached plugin if it declares a dependency 
+    on a version of Jenkins core before the split. Since that dependency to the detached plugin 
+    is not explicitly specified, it is implied.
+    ```
