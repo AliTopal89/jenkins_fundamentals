@@ -276,4 +276,96 @@ Ways to install PLugins:
   - Notifications can be configured to be sent for any build status
     - Start, Aborted, Failure, Unstable
     - Custom content like Commit list can be added etc.
-    
+
+### Distributed Build Architecture
+
+Distrubuted builds run on nodes instead of master node. 
+  - The Jenkins master is webserver that also actis as a brain for deciding how/when/where to run tasks
+  - A `node` is a server whre Jenkins runs jobs for `executors`.
+  - The `agent` is the tool that manages executors on remote node.
+  - Jenkins Master
+    - Files written when a pipeline executes, are written to the filesystem on the master 
+      unless they are off-loaded to an artifact repo such as nexus.
+    - Some administrative tasks (such as backups) are run on master 
+    node (in our case at work, it is mounted to EFS from the agent).
+    - A `node` is taken offline if Disk Space, free swap etc. go outside the configured threshold.
+    - Distributed Builds:
+      - Master - serves the http request and stores all important information `/var/lib/jenkins/workspace/...`
+      - Advantages of distributed builds - `${JENKINS_HOME}` is proected, and makes the instance more reliable
+      - 
+    - Distributed Build agents:
+      - Uses `slave.jar` file
+      - on your browser at `jnlpJars/slave.jar` under `$JENKINS_URL`
+
+#### Master agent connectors
+
+- Agent to master control enabled by default
+- An agent can be launced by ssh from master, agent managed as windwos service, 
+  JNLP(Java web start), or a custom script from master
+- Communication between Jenkins and Unix agents can use SSH
+- SSHD only need to be installed on agents
+  - Agents JAR file is managed by Jenkins master
+  - masters SSH public key must be in remote node's authorized keys
+
+##### Windows Service
+To connect Jenkins to Windows agent, DCOM is an option *Although cloudbees suggest not to, info [here](https://support.cloudbees.com/hc/en-us/articles/203773700-Why-not-use-DCOM)*
+  - Just need an admin username and password.
+
+##### JNLP
+- launced as a single command with `slave.jar` file
+- TCP or HTTP tunneling socket connection is made
+- TCP port must be defined on Global security
+  - *TCP is connection-oriented, and a connection between client and* 
+    *server is established before data can be sent. The server must be listening* 
+    *(passive open) for connection requests from clients before a connection is established.*
+- Can also be run "headlessly" (is software capable of working on a device without a graphical user interface) 
+  via jar instead of Java Web Start with Gui
+
+##### Custom Script
+- Fetch `slave.jar` & Establish connection by launching remote agent.
+
+#### Benefits of master agent node
+- Scalability - when build demand increases scale up merely pointing Jenkins at another agent node,
+- Security 
+  - Job that run on master have full permissions to jenkins resources on master, potentially allowing
+    malicious user to access private information
+  - Use Cloud agents, that are created for each build then destroyed (YAD Plugin for example)
+
+#### Installed tool problems
+
+JDK versions, Maven, Gradle etc are installed causing too many versioning problems?
+
+Dedicated Agents:
+
+  - Specialized hardware/ operating systems
+  - Specialized Software
+  - User the `Restrict where this project can be run` option from project configuration
+
+Fungible Agents:
+
+  - Fungibility is the property of a good or commodity whose individual units
+    are capable of mutual substitution
+  - Configuring a machine to act as an agent inside your infrastructure can be tedious 
+  and time consuming. This is especially true when the same set-up has to be replicated on 
+  a large pool of agents. Because of this, is ideal to have `fungible` agents, which are agents 
+  that are easily replaceable. Agents should be generic for all builds rather customized for a 
+  specific job or a set of jobs. The more generic the agents, the more easily they are 
+  interchanged, which in turn allows for a better use of resources and a reduced impact 
+  on productivity if some agents suffer an outage
+
+Cloud agents:
+  - Agent in a cloud like Amazon EC2, MS Azure
+  - Easier to do with container tech like Docker
+    - Start a Cloud-Based agent
+    - Run the build inside the agent
+    - Then tear it down
+
+#### Monitoring nodes
+
+- NodeMonitor in Jenkins
+- Runs healthcheck on CPU Memory Usage, Disk Space etc.
+
+### Going Further
+1. [Distributed Builds](https://wiki.jenkins.io/display/jenkins/distributed+builds)
+1. [Distributed Builds Architecture](https://www.jenkins.io/doc/book/architecting-for-scale/#distributed-builds-architecture)
+1. [So you wanna build the world's largest Jenkins cluster](https://www.cloudbees.com/sites/default/files/2016-jenkins-world-soyouwanttobuildtheworldslargestjenkinscluster_final.pdf)
