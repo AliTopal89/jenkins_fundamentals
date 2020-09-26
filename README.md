@@ -248,3 +248,18 @@ Note on Implied plugins:
     on a version of Jenkins core before the split. Since that dependency to the detached plugin 
     is not explicitly specified, it is implied.
     ```
+#### Manual Plugin installation
+
+Chuck Norris Plugin
+- Go to `http://localhost:5000/chucknorris.hpi` 
+- `Manage Plugin` -> `Advanced` -> `Upload Plugin`
+- Upload the hpi file, then restart jenkins fom Update Center
+
+Ways to install PLugins:
+  - https://github.com/jenkinsci/docker#preinstalling-plugins -jenkins docker image 
+  provides a script that fetches the plugins
+
+  - https://github.com/jenkinsci/custom-war-packager - which allows you to package your
+  own plugins. Custom WAR Packager (CWP) allows building ready-to-fly Jenkins packages using 
+  a YAML specification. The tool can produce Docker images, WAR files, and Jenkinsfile Runner 
+  docker images (aka single-shot Jenkins masters).
