@@ -263,3 +263,17 @@ Ways to install PLugins:
   own plugins. Custom WAR Packager (CWP) allows building ready-to-fly Jenkins packages using 
   a YAML specification. The tool can produce Docker images, WAR files, and Jenkinsfile Runner 
   docker images (aka single-shot Jenkins masters).
+
+### Configure Notifications
+- Notifications for CI/CD can be delivered with email, Slack and the most unfortunate TEAMS
+- Built in Email Notifications
+  - Main configuration is about SMTP(sending) server
+  - Every failed build
+  - Every successful build after a failed
+  - Every unstable build after a successful 
+    - triggers a new email
+- Slack Notification:
+  - Notifications can be configured to be sent for any build status
+    - Start, Aborted, Failure, Unstable
+    - Custom content like Commit list can be added etc.
+    
