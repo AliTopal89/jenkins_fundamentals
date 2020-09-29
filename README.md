@@ -365,6 +365,36 @@ Cloud agents:
 - NodeMonitor in Jenkins
 - Runs healthcheck on CPU Memory Usage, Disk Space etc.
 
+### Distributed Jenkins Build (LAB)
+
+- ```bash
+  cloudbees-devbox $ ssh -i /ssh-keys/vagrant_insecure_key -p22 \
+  jenkins@jdk8-ssh-agent \
+  echo "-- Hello from jdk8-ssh-agent"
+  ```
+
+- Copy the content of `/ssh-keys/vagrant_insecure_key` somewhere 
+
+- Manage Jenkins -> Manage Nodes -> New Node
+  - #2 of executors
+  - Usage - `Use this node as much as possible`
+    - *Use this node as much as possible: This is the default setting.*
+      *In this mode, Jenkins uses this node freely. Whenever there is a*
+      *build that can be done by using this node, Jenkins will use it.*
+  - Host `jdk8-ssh-agent`
+  - Credentials - `Jenkins (SSH Key for agent)` 
+  - Click Advanced - Port 22
+  - Host Key Verification Strategy: `Non Verifying Verification Strategy`
+    - *This is the legacy behavior. It does not perform Host Key Verification and is considered unsafe.*
+    - More [strategies](https://support.cloudbees.com/hc/en-us/articles/115000073552-Host-Key-Verification-for-SSH-Agents#howtosetuphostkeyverificationforjenkins)
+  - Name - JAVA_HOME
+  - Value - `/var/lib/jvm/java-1.8-openjdk`
+  - Save
+  - Agent may be offline for a few, click on Logs from left pannel to see the progress
+  
+#### Reconfiguring Master agent.
+
+
 ### Going Further
 1. [Distributed Builds](https://wiki.jenkins.io/display/jenkins/distributed+builds)
 1. [Distributed Builds Architecture](https://www.jenkins.io/doc/book/architecting-for-scale/#distributed-builds-architecture)
