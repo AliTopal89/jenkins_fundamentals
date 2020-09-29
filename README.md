@@ -391,9 +391,14 @@ Cloud agents:
   - Value - `/var/lib/jvm/java-1.8-openjdk`
   - Save
   - Agent may be offline for a few, click on Logs from left pannel to see the progress
-  
+
 #### Reconfiguring Master agent.
 
+- Configure System
+- numer of executors #0
+- Usage - Only build jobs with label restrictions matching this node. 
+- Configure Global Security
+  - Enable Agent -> Master Access Control
 
 ### Going Further
 1. [Distributed Builds](https://wiki.jenkins.io/display/jenkins/distributed+builds)
