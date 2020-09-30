@@ -405,14 +405,183 @@ Cloud agents:
 - Know the system
 - Least privilede  - do not give permissions to everyone to do everything
   Manage AAA concepts:
-    - Authentication
-    - Authorization
-    - Accounting 
+    - Authentication - User acess
+    - Authorization - User priviledges
+    - Accounting - Monitor your system
 - Defense in Depth - put scurity on layered systems
 - Prevention is Good, Detection is better - monitor jenkins installation, detective mode!
+
+#### Agents and Security
+
+By Default, the pipeline  executes with full authority.
+All of the pipeline logic, groovy conditional and loops executes on master
+Creates `workspace` for each build that runs.
+Pipeline calls steps that run on agents - Each of which are combination of scripts or commands.
+  - Agent writes some files to nodes, sends data back to master, request info from master
+  - Agents on master jenkins maybe able to access Jenkins configuration and workspace of other builds
+  - An agent can write malicious code to local disk so the node can get tainted
+
+For maximum security, run all builds on ephermal agents in the cloud 
+that get destroyed after the build is finished.
+
+Pipelines may need access to external resources such as Brakeman, Nexus, Elasticsearch DB
+  - Store the usernames and password in Credentials instead of directly on pipeline
+
+##### Authentication
+
+- Security Realm tell jenkins which referential to use for authentication, which is a dedicated
+database for user and passwords
+  - Defines the security implementation used to establish the identity of users
+  - Only one security realm can be active at a time
+  - By default, users and groups come from jenkins internal db.
+- 4 kinds of Realm
+  - Jenkins User Database
+  - Unix user/group Database
+  - Server Container
+  - External LDAP
+    - *LDAP provides the communication language that applications use to communicate* 
+    *with other directory services servers. Directory services store the users,*
+    *passwords, and computer accounts, and share that information with other entities on the network.*
+
+Eg.
+Configure Global Security -> Realm: Jenkins own user database -> 
+  Manage Users -> Create User -> with Username Password and email
+  - Moodify User with Flywheel to give description of user, 
+    ssh public keys, timezone, modify username & password 
+
+##### AUthorization
+
+- Grants access rights to:
+  - `Resource`: Task, Object/Action to manipulate
+  - `Role`: Set of privileges grouped by comodity
+  - `Requester`: User or group with role that want to manipulate resources
+
+- Use security matrix to populate authorization
+  - `Matrix based security`: assign global privileges to users/groups
+  - `Project based matrix authorization strategy`: assign privileges based on specific projec
+  - `Role Staretgy`: assign permission to specific roles
+
+- Configure authorization
+
+  - `Logged in users can do anything`: In this mode, every logged-in user gets 
+  full control of Jenkins. The only user who won't have full control is 
+  anonymous user, who only gets read access.
+
+  - `Matrix-based security`: Permissions are additive. 
+  That is, if an user X is in group A, B, and C, then the permissions that this 
+  user actually has are the union of all permissions given to X, A, B, C, and anonymous.
+    - `anonymous`: permission granted to all *unauthenticated* users who access Jenkins env
+    - `authenticated` permissions granted to all *authenticated* users who access jenkins env
+    - Permissions Groups: 
+      - `Overall`
+        - Administer - Make system wide configuration changes
+        - Read - View almost all pages within Jenkins env
+        - RunScripts - Run groovy scripts via the groovy console or groovy cli command.
+          - If the script attempts and unapproved operation, it is killed
+          - Unapproved operation is added to approval queue which an administrator can review
+            and add it to the whitelist. 
+        - UploadPlugins - Upload arbitrary plugins.
+        - ConfigureUpdateCenter - Configure update sites and proxy settings.
+      - `Credentials`
+      - `Agent`
+      - `Job`
+      - `Run`
+      - `View`
+      - `SCM`
+      - `Metrics`
+      - `Lockable Resources`
+  - `Project Based Matrix Authorization`: Similiar to Matrix based but define authorization by project,
+  rather than user.
+     - This authorization scheme is an extension to *Matrix-based security* which 
+     allows additional access control lists (ACLs) to be defined for each project 
+     separately in the Project configuration screen. This allows granting specific 
+     users or groups access only to specified projects, instead of all projects in the Jenkins environment.
+
+##### Accounting
+
+- Occurs in the context of a user who is authenticated
+- Mesures resources used or cosumed by users during access.
+- all logging output to `stdout`
+
+Logs on Linux:
+- Default logs are available in `/var/log/jenkins/jenkins.log` can be customized though:
+  - `/etc/default/jenkins` - for `*.deb`
+  - `/etc/sysconfig/jenkins` - for `*.rpm`
+
+Logs on Windows
+  - `%JENKINS_HOME%/jenkins.out`
+  - `%JENKINS_HOME%/jenkins.err`
+  - location can be be customized in `%JENKINS_HOME%/jenkins.xml`
+
+Logs on Docker, if jenkins inside Docker detached container
+  - `docker logs <contanierID>`
+
+Logs on Jenkins GUI
+  - Manage Jenkins -> System Log
+
+Monitor Server Load
+  - Manage Jenkins -> Load Statistic
+    - Displays a graph of server load time for the master node
+    - Graph Keeps track of 
+      - **Number of online executors**
+        `For a computer`: if the computer is online then this is the number of executors 
+        that the computer has; if the computer is offline then this is zero.
+        `For a label`: this is the sum of all executors across all online computers in this label.
+        `For the entire Jenkins`: this is the sum of all executors across all online 
+        computers in this Jenkins installation.
+        Other than configuration changes, this value can also change when agents go offline.
+      - **Number of busy executors**
+        This line tracks the number of executors (among the executors counted above) 
+        that are carrying out builds. The ratio of this to the number of online 
+        executors gives you the resource utilization. If all your executors are busy 
+        for a prolonged period of time, consider adding more computers to your Jenkins cluster.
+      - **Number of available executors**
+        This line tracks the number of executors (among the online executors counted above) 
+        that are available to carry out builds. The ratio of this to the total number of executors 
+        gives you the resource availability. If none of your executors are available for a prolonged 
+        period of time, consider adding more computers to your Jenkins cluster.
+      - **Queue length**
+        This is the number of jobs that are in the build queue, waiting for an available 
+        executor (of this computer, of this label, or in this Jenkins, respectively). This doesn't 
+        include jobs that are in the quiet period, nor does it include jobs that are in the queue 
+        because earlier builds are still in progress. If this line ever goes above 0, that means 
+        your Jenkins will run more builds by adding more computers.
+
+Monitoring
+  - **Monitoring**
+    - The Monitoring plugin provides monitoring of Jenkins with JavaMelody
+    - Charts of CPU, memory, system load average, HTTP response time
+    - Details of HTTP sessions, errors and logs, actions for GC, heap dump, invalid session(s).
+
+  - **Disk Usage**
+    - The Disk Usage plugin shows project-wide details for all jobs and all workspaces
+    - It also displays Disk Usage Trend.
+
+  - **Build Monitor**
+    - The Build Monitor Plugin provides a detailed view of the status of selected Jenkins jobs
+    - It also shows the names of people who might be responsible for "breaking the build".
+
+Auditing
+  - **Audit Trail**
+    - Keeps a log of users who performed particular Jenkins operations, such as configuring jobs
+    - This plugin adds an Audit Trail section in the main Jenkins configuration page
+    - Many configuration options are supported
+      - Save output audit logs in rolling files
+      - Send audit logs to a Syslog server
+      - Output audit logs in `stdout` or `stderr`. Primarily intended for debugging purposes
+  - **Job Config History**
+    - Saves a copy of the configuration file of a job (config.xml) for each change made and of 
+    the system configuration
+    - Provides an overview page of all changes
+    - The overview page only lists changes made to the system configuration (for performance reasons)
+      - Use links to view either all job configuration histories or just the deleted jobs 
+        or all kinds of configuration history entries together.
 
 
 ### Going Further
 1. [Distributed Builds](https://wiki.jenkins.io/display/jenkins/distributed+builds)
 1. [Distributed Builds Architecture](https://www.jenkins.io/doc/book/architecting-for-scale/#distributed-builds-architecture)
 1. [So you wanna build the world's largest Jenkins cluster](https://www.cloudbees.com/sites/default/files/2016-jenkins-world-soyouwanttobuildtheworldslargestjenkinscluster_final.pdf)
+1. [Jenkins Security - Authorization](https://www.jenkins.io/doc/book/managing/security/#authorization)
+1. [LDAP vs. ActiveDirectory](https://www.varonis.com/blog/the-difference-between-active-directory-and-ldap/)
+1. [Matrix Based Security](https://wiki.jenkins.io/display/jenkins/matrix-based+security)
