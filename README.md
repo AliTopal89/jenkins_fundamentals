@@ -400,6 +400,18 @@ Cloud agents:
 - Configure Global Security
   - Enable Agent -> Master Access Control
 
+### SECURITY
+
+- Know the system
+- Least privilede  - do not give permissions to everyone to do everything
+  Manage AAA concepts:
+    - Authentication
+    - Authorization
+    - Accounting 
+- Defense in Depth - put scurity on layered systems
+- Prevention is Good, Detection is better - monitor jenkins installation, detective mode!
+
+
 ### Going Further
 1. [Distributed Builds](https://wiki.jenkins.io/display/jenkins/distributed+builds)
 1. [Distributed Builds Architecture](https://www.jenkins.io/doc/book/architecting-for-scale/#distributed-builds-architecture)
