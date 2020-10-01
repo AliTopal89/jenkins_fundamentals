@@ -676,11 +676,68 @@ the system property `hudson.model.DirectoryBrowserSupport.CSP:`
   System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "default-src 'self'; style-src 'self' 'unsafe-inline';")
  ```
 
+### Managing Credentials
+
+- Credentials are used to get trusted access to other resources without having
+-  Jenkins users credentials to get trusted access to for example
+  - SCM services for getting and pushing code, i.e GITHUB_CREDENTIALS
+  - Remote Secured Sercies i.e LDAP pluings
+  - Artifact Servers i.e Nexus
+  - Webhooks i.e Slack, TEAMS
+  - AWS credentials i.e. Serverless aws_key_id, aws_secret_key
+- Using Credentials provides and API consumable by plugins and jenkins resources
+- Authorization matrix provides create, delete, update view credentials
+- Each plugin defines the credential types it supports and may not support all credential types
+  - For example git plugin supports username, password and private key but 
+    not certificates or secret text.
+- Instead of sharing this username and password, it is passed in to credential
+- Pipelines then can use `environment` or `withCredentials` directive to supply the username and password.
+- All credentials are stored as `type Secret` in an encrypted form on Jenkins Master
+- Credentials are encrypted using a key from master key, keys are tied to and encrypted
+  by the instance ID, meaning they cannot be migrated or copied to a new jenkins instance
+- Keys to decrypt secrets are stored `$JENKINS_HOME/secrets/` directory
+- Credentials can be added by authorized users from `Credentials -> Create`
+  - Assign an ID that can be used to the access the credential, if you don't Jenkins assigns a GUID
+  - Scope defines whre this credential can be used
+    - **System**: 
+      - This credential is only available to the object on which the credential is associated. 
+      Typically you would use system-scoped credentials for things like email auth, 
+      agent connection, etc, i.e. where the Jenkins instance itself is using the credential. 
+      Unlike the global scope, this significantly restricts where the credential can be used, 
+      thereby providing a higher degree of confidentiality to the credential.
+    - **Global**:
+    - This credential is available to the object on which the credential is associated 
+      and all objects that are children of that object. Typically you would use global-scoped 
+      credentials for things that are needed by jobs.
+- Credentials Type/Kind:
+  - **Secret Text**:
+    - MYVARNAME contains the path of the file with secret text, i.e NFS_SERVER_IP, TEAMS_WEBHOOK_URL
+  - **Standard username and password**:
+    - MYVARNAME is set to `<username>:<password>` or `MYVARNAME_USR` & `MYVARNAME_PSW`
+- Each `credential` type supported for the `environment` directive, must be supported in the credential
+  binding plugin and have a special handler in Declarative Pipeline
+
+- ```groovy
+  steps {
+                 withCredentials([string(credentialsId: 'mytoken', variable: 'TOKEN')]) {
+                 sh 'env | grep TOKEN'
+                 sh 'echo ${TOKEN} > secret-file.txt'
+                 }
+  ```
+  - `withCredentials` binds that to a local Pipeline variable called `TOKEN`
+  - The single-quotes will cause the secret to be expanded by the shell as an environment variable. 
+    The double-quotes are potentially less secure as the secret is interpolated by Groovy, 
+    and so typical operating system process listings (as well as Blue Ocean, and the 
+    pipeline steps tree in the classic UI) will accidentally disclose it.
+
 
 ### Going Further
 1. [Distributed Builds](https://wiki.jenkins.io/display/jenkins/distributed+builds)
 1. [Distributed Builds Architecture](https://www.jenkins.io/doc/book/architecting-for-scale/#distributed-builds-architecture)
 1. [So you wanna build the world's largest Jenkins cluster](https://www.cloudbees.com/sites/default/files/2016-jenkins-world-soyouwanttobuildtheworldslargestjenkinscluster_final.pdf)
 1. [Jenkins Security - Authorization](https://www.jenkins.io/doc/book/managing/security/#authorization)
+1. [Quick and simple security](https://wiki.jenkins.io/display/jenkins/quick+and+simple+security)
 1. [LDAP vs. ActiveDirectory](https://www.varonis.com/blog/the-difference-between-active-directory-and-ldap/)
 1. [Matrix Based Security](https://wiki.jenkins.io/display/jenkins/matrix-based+security)
+1. [Auditing best practices](https://www.cloudbees.com/blog/best-practices-setting-jenkins-auditing-and-compliance)
+
