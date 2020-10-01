@@ -577,6 +577,105 @@ Auditing
       - Use links to view either all job configuration histories or just the deleted jobs 
         or all kinds of configuration history entries together.
 
+### Global Security Settings
+
+Global Security Settings close off intrusion paths to Jenkins instance
+**Access Control for Builds**
+  - Similar to access control for users, builds in Jenkins run with an 
+  associated user authorization. By default, builds run as the internal 
+  SYSTEM user that has full permissions to run on any node, create or delete jobs, 
+  start and cancel other builds, etc.
+  
+  In a Jenkins setup with fine-grained permissions control, this is undesirable. 
+  For example, having builds run as SYSTEM could allow users with access to configure 
+  and start one job to start builds of any other jobs using Pipeline Build Step Plugin.
+  
+  The solution to this is to configure access control for builds. The most notable 
+  plugin in this space is Authorize Project Plugin, which allows flexible configuration 
+  of global and per-project build authorization
+  - Project default build authorization:
+    - Specify the authorization to use for projects.
+  - Per-project configurable build authorization
+    - Allows the authentication that a project will run as to be configured 
+      from the project configuration page.
+      - **Run as specific user**
+        - Run a build as a specified user. You are required to "one" of following 
+        condition to successfully save the configuration.
+          - You are an administrator.
+          - You yourself are the specified user.
+          - The specified user is not changed from the last configuration,
+          and "No need for re-authentication" was checked in the last configuration.
+          - You enter the password for the specified user.
+      - **Run as user who triggred the build**
+        - Run a build as a user who triggered it. If the build was triggered 
+        as a downstream build, the build runs as a user who triggered the upstream build.
+        This does not work when the build is triggered by SCM polling or scheduled triggering. 
+        The build runs as SYSTEM authorization in those cases.
+      - **Run as anonymous user**
+        - Run a build as an anonymous user.
+      - **Run as system**
+        - Run as SYSTEM user
+
+**CSRF (Cross Site Request Forgery)**
+
+- is an exploit that enables an unauthorized third party to perform requests
+  against a web application by impersonating another, authenticated user. 
+- when enabled Jenkins checks for a CSRF token or "crumb" with default crumb issuer.
+  In practical terms, this means that each request to the Jenkins API needs to have 
+  what is known as a crumb defined in the headers.
+- Accessing Jenkins through a poorly configured reverse proxy may result in 
+  CSRF HTP header being stripped consider [Jenkins behind a NGINX reverse proxy](https://www.jenkins.io/doc/book/system-administration/reverse-proxy-configuration-with-jenkins/)
+
+**JNLP (Java Network Launch Protocol)**
+
+- can be used to launch an application on a client desktop by using resources that are hosted
+  on a remote web server. (ECS jenkins rails instance config)
+- Use "agents" field to configure JNLP
+  - If you are not using inbound agents, it's recommended that you disable this entirely, 
+    which is the default installation behavior. Jenkins uses a TCP port to communicate 
+    with agents connected inbound. If you're going to use inbound agents, you can allow 
+    the system to randomly select a port at launch 
+    (this avoids interfering with other programs, including other Jenkins instances). 
+    As it's hard for firewalls to secure a random port, you can instead specify 
+    a fixed port number and configure your firewall accordingly.
+
+**Agent-to-Master Access Control**
+
+- filters the commands that agents can send to the Jenkins master
+- recommended to keep this protection enabled, especially 
+  because of agents can be taken from other teams.
+- if builds are failing 
+  - upgrade latest version of all plugins
+  - whitelist specific commands that you need
+  - Add `allow/deny` rules to refine list of files on master, ant type of access on agent
+
+**Markup Formatng**
+
+- Jenkins allows some user input
+- HTML formatting could inadvertently inserting unsafe HTML/JS.
+  - Could be used for XSS (Cross-site scripting) attacks
+- Use Markup Formatter to control how HTML is rendered
+- You can choose Safe HTML to allow subset of HTML markup
+- Plain Text option:
+  - Treats all input as plain text. HTML unsafe characters 
+  like `<` and `&` are escaped to their respective character entities.
+
+**Content Security Policy**
+
+- is applied to static files on Jenkins
+- This header is set to a very restrictive default set of permissions 
+to protect Jenkins users from malicious HTML/JS files in workspaces, 
+`/userContent`, or archived artifacts.
+
+- The CSP header sent by Jenkins can be modified by setting 
+the system property `hudson.model.DirectoryBrowserSupport.CSP:`
+
+- For example:
+
+```groovy
+  System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "default-src 'self'; style-src 'self' 'unsafe-inline';")
+ ```
+
 
 ### Going Further
 1. [Distributed Builds](https://wiki.jenkins.io/display/jenkins/distributed+builds)
