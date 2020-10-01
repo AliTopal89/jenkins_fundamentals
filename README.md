@@ -730,6 +730,93 @@ the system property `hudson.model.DirectoryBrowserSupport.CSP:`
     and so typical operating system process listings (as well as Blue Ocean, and the 
     pipeline steps tree in the classic UI) will accidentally disclose it.
 
+### Lab: Enable Jenkins security
+
+OpenLDAP is an open-source implementation of LDAP
+Configure Global Security -> Security Realm -> LDAP
+  - Server: 
+    - Specify the name of the LDAP server host name(s) 
+    `(like ldap.sun.com)`. If your LDAP server uses a port other than 
+    389 (which is the standard for LDAP), you can also append a 
+    port number here, like `ldap.acme.org:1389.`
+  - root DN:
+    - For authenticating user and determing the roles given to this user, 
+      Jenkins performs multiple LDAP queries. Since an LDAP database 
+      is conceptually a big tree and the search is performed recursively, 
+      in theory if we can start a search starting at a sub-node (as opposed to root), 
+      you get a better performance because it narrows down the scope of a search.
+      for example: `dc=sun` `dc=com`
+  - User search base:
+    - One of the searches Jenkins does on LDAP is to locate the user record 
+    given the user name. If you specify a relative DN (from the root DN) here, 
+    Jenkins will further narrow down searches to the sub-tree.
+    for example: `ou=people`
+  - User search filter:
+    - One of the searches Jenkins does on LDAP is to locate the user record given the user name.
+    If your LDAP server doesn't have uid or doesn't use a meaningful uid value, try `"mail={0}"`, 
+    which lets people login by their e-mail address.
+  - Group Search base:
+    - This field determines the query to be run to identify the organizational unit that contains groups.
+  - Group Search filter:
+    - relative to the Group search base to determine if there is a group with the 
+    specified name ( `{0}` is substituted by the name being searched for)
+  - Group membeership:
+    - Search for LDAP groups containing `member={0}`
+  - Display Name LDAP attribute:
+    - When a user's details are resolved from LDAP, the specified attribute in those 
+    user details will be consulted to retrieve the display name for the user.
+  - Email address LDAP attribute:
+    - When a user's details are resolved from LDAP, the specified attribute in those 
+    user details will be consulted to retrieve the email address for the user unless 
+    the email address resolver is disabled.
+*Test LDAP setting not working on this version of jenkins so apply and save*
+
+Login and verify username and email address from `.../jenkins/user/<username>/configure`
+  - Some fields have been populated using LDAP Data, Updating only changes it inside jenkins 
+    database not in LDAP Directory Service.
+
+We want to seperate rights based on group membership so that jenkins can be scaled for the
+organizations growth using 
+**Project based Matrix Strategy**
+  - Non authenticated users (Jenkins system's anonymous user):
+    - No access to Jenkins
+  - Authenticated users, members of `jenkins-users`(member login `Contributor`) LDAP group:
+    - Can view Jenkins dashboard and non-private jobs
+  - Authenticated users, members of `jenkins-developers`(member login `Colleague`) LDAP group:
+    - Can Launch, Create/View/Update/Delete (CRUD), Configure, Move jobs, Can CRUD Credentials
+  - Authenticated users, members of `jenkins-admin`(member login same as default) LDAP group:
+    - Can administer Jenkins
+
+Privacy and Credentials:
+- [running private admin scripts](http://localhost:5000/gitserver/butler/admin-scripts.git)
+- create `admin-script` project and folder name with above 
+   git [repo](http://localhost:5000/gitserver/butler/admin-scripts) [at](http://localhost:5000/webide/)
+- create new file `run-admin-task.sh`
+  - 
+  ```bash
+  #!/bin/bash
+
+  # Exit immediately if a pipeline retur
+  set -e
+
+  # Treat unset variables and parameters other than the special
+  # parameters ‘@’ or ‘*’ as an error when 
+  # performing parameter expansion
+  set -u
+
+  echo "Some secret admin task here"
+  ```
+- commit and push and login to jenkins as butler and create a freestyle project with name admin-tasks
+- select project based security and add `jenkins-admin` user/group permissions
+- build: `bash -x run-admin-task.sh`
+- SCM - the git repo `http://localhost:5000/gitserver/butler/admin-scripts.git` will give failed to 
+connect status 128 error cause you gotta add the credentials
+- add credentials with kind username and password, use `butler-gogs-creds` for ID and 
+  `Butler's credentials for Gogs` as the description
+- run and expect to see `echo "Some secret admin task here"`
+- once you login as `colleague` you shouldn't be able to see this admin task
+
+
 
 ### Going Further
 1. [Distributed Builds](https://wiki.jenkins.io/display/jenkins/distributed+builds)
