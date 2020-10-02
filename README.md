@@ -1022,6 +1022,48 @@ downloaded locally
 > representations of Web resources by using a uniform and predefined set of 
 > stateless(no session information is retained by the receiver/server) operations
 
+### Lab: Jenkins CLI
+
+`TCP port for inbound agents` must be correctly configured to ensure that Jenkins CLI will work, using port 50000
+
+- Go to `http://localhost:5000/jenkins/user/<username>/configure` and add new API token
+- Cick add new token and generate the token and save it somewhere 110e0046f3a0a81047c75df4334acc59bb
+
+- Use the the jenkins private url `http://jenkins:8080/jenkins` instead of the public one, this allows us to reach to
+jenkins directly instead of using a reverse-proxy
+
+```
+cloudbees-devbox $ curl -LO \
+   http://jenkins:8080/jenkins/jnlpJars/jenkins-cli.jar
+```
+
+```
+cloudbees-devbox $ java -jar ./jenkins-cli.jar -s http://jenkins:8080/jenkins help
+
+ERROR: You must authenticate to access this Jenkins.
+Jenkins CLI
+Usage: java -jar jenkins-cli.jar [-s URL] command [opts...] args...
+```
+
+```
+export JENKINS_URL=http://jenkins:8080/jenkins
+java -jar jenkins-cli.jar -auth ${USERNAME}:${API_TOKEN} help
+```
+
+- kick off a pipeline-job from Team A folder
+
+`cloudbees-devbox $ java -jar jenkins-cli.jar -auth ${USERNAME}:${API_TOKEN} build -s Team\ A/pipeline-job -v`
+
+- to skip a build use `-c`
+`cloudbees-devbox $ java -jar jenkins-cli.jar -auth ${USERNAME}:${API_TOKEN} build -c Team\ A/pipeline-job -v`
+
+
+###### Note on reverse-proxy:
+
+> In  computer networks, a reverse proxy is a type of proxy server 
+> that retrieves resources on behalf of a client from one or more servers. 
+> These resources are then returned to the client, appearing as 
+> if they originated from the server itself.
 
 ### Going Further and reference guide
 1. [Distributed Builds](https://wiki.jenkins.io/display/jenkins/distributed+builds)
