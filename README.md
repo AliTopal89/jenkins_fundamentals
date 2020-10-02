@@ -931,6 +931,31 @@ backup to the new system.
   - `export JENKINS_HOME=mnt/backup-test`
   - `java -jar jenkins.war httpPort=9999`
 
+####  Example Restore issue fix
+How to fix missing ConfigureClouds:
+
+In case cloud config gets wiped out (current reason unclear as to why agency wide some jenkins master instances had config.xml error such as below)
+
+```
+Also:   java.nio.file.FileSystemException: $JENKINS_HOME/blah.blah.123 tmp -> /$JENKINS_HOME/config.xml: Function not implemented
+```
+You can restore to a previous version of the setting by locating the configuration from `localhost:over9000/jobConfigHistory` and click 
+on the RAW output section so your xml heading for example should start with
+
+```xml
+<?xml version='1.1' encoding='UTF-8'?>
+<hudson>
+```
+Copy the xml output to a file and scp it to master jenkins and update `$JENKINS_HOME/config.xml` 
+(or YOLO and directly update $JENKINS_HOME/config.xml) make sure the owner 
+is jenkins with `sudo chown jenkins:jenkins config.xml`. Then go to `$JENKINS_HOME/restart` 
+check the configuration and run few jobs to test it out
+
+**Somehow Github Pull Requester Builder Plugin creds got wiped out**
+For this issues use case it was `org.jenkinsci.plugins.ghprb.GhprbTrigger.xml` 
+that needed to be updated, check out the diffs from here and grab the one with correct credentials, 
+
+Copy the content to an xml file and on master jenkins update `$JENKINS_HOME/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml`
 
 ### Going Further and reference guide
 1. [Distributed Builds](https://wiki.jenkins.io/display/jenkins/distributed+builds)
