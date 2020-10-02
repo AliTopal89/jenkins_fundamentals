@@ -934,13 +934,15 @@ backup to the new system.
 ####  Example Restore issue fix
 How to fix missing ConfigureClouds:
 
-In case cloud config gets wiped out (current reason unclear as to why agency wide some jenkins master instances had config.xml error such as below)
+In case cloud config gets wiped out (current reason unclear as to why agency wide some 
+jenkins master instances had config.xml error such as below)
 
 ```
 Also:   java.nio.file.FileSystemException: $JENKINS_HOME/blah.blah.123 tmp -> /$JENKINS_HOME/config.xml: Function not implemented
 ```
-You can restore to a previous version of the setting by locating the configuration from `localhost:over9000/jobConfigHistory` and click 
-on the RAW output section so your xml heading for example should start with
+You can restore to a previous version of the setting by locating the configuration 
+from `localhost:over9000/jobConfigHistory` and click on the RAW output section so your 
+xml heading for example should start with:
 
 ```xml
 <?xml version='1.1' encoding='UTF-8'?>
@@ -957,6 +959,70 @@ that needed to be updated, check out the diffs from here and grab the one with c
 
 Copy the content to an xml file and on master jenkins update `$JENKINS_HOME/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml`
 
+### Automate Jenkins
+
+Scripting allows you to automate routine tasks, bulk updates, and provides efficiency and consistency
+Jenkins Command Line interface is a Java application provided as jenkins-cli.jar downloadable from jenkins,
+which doesn't have to run on Jenkins server
+
+CLI makes an HTTP call to jenkins, discovers the port used for JNLP Agent. CLI attempts TCP/IP connection
+if it fails goes back HTTP-based connection. Execution happens on master, `jenkins-cli.jar` gets
+downloaded locally
+
+#### CLI Authentication
+
+- with SSH public key registered on jenkins under user account
+- `java -jar jenkins-cli.jar -s http://localhost:8080 help` from jenkins cli where `-s` is the url to connect to
+- you can check the existing commands from JENKINC CLI page on manage jenkins
+- CLI `build` command paramaters:
+  - `-c` run polling first and build only if there is a change
+  - `-s` do not just schedule, but wait until the build is completed
+  - `-p` specify build parameters
+  - `-v` report console output as well
+- CRUD of jobs
+  - reads/writes xml representation of the job
+  - can be used to script job creation/updates
+- Groovysh:
+  - you can use the interactive groovy shell
+    - ```java
+      java -jar jenkins-cli.jar -s http://${JENKINS_URL} groovysh
+      ``` 
+    - ```groovy
+        groovy:000> import Jenkins.model.Jenkins
+        => [import hudson.model.*, import Jenkins.model.Jenkins]
+        ...
+      ```
+    - Useful groovy [scripts](https://github.com/jenkinsci/jenkins-scripts)
+
+#### Using Jenkins API
+
+- Machine to machine communication is required when the service talks to jenkins not the GUI.
+- Jenkins API is REST-like API
+- No single entrypoint, but per resource API (Pojects API: `http://${JENKINS_URL}/job/api`) URL
+- Example JSON API call:
+  - ```js
+      // example - sending a "File Parameter":
+      curl -X POST \ 
+        --user USER:PASSWORD \
+        --form file0=@PATH_TO_FILE \
+        --form json='{"parameter": [{"name":"FILE_LOCATION_AS_SET_IN_JENKINS", "file":"file0"}]}' \
+        http:/\/${JENKINS_URL}/job/${JOB_NAME}/build
+
+      // example -sending "String Parameters":
+      curl -X POST \
+        --data token=$TOKEN \
+        --data-urlencode json='{"parameter": [{"name":"id", "value":"123"}, {"name":"verbosity", "value":"high"}]}'
+        http:/\/${JENKINS_URL}/job/${JOB_NAME}/build/api \
+      ```
+
+
+###### Note on REST
+> **RE**presentational **S**tate **T**ransfer.
+> RESTful Web services allow the requesting systems to access and manipulate textual 
+> representations of Web resources by using a uniform and predefined set of 
+> stateless(no session information is retained by the receiver/server) operations
+
+
 ### Going Further and reference guide
 1. [Distributed Builds](https://wiki.jenkins.io/display/jenkins/distributed+builds)
 1. [Distributed Builds Architecture](https://www.jenkins.io/doc/book/architecting-for-scale/#distributed-builds-architecture)
@@ -968,3 +1034,4 @@ Copy the content to an xml file and on master jenkins update `$JENKINS_HOME/org.
 1. [Auditing best practices](https://www.cloudbees.com/blog/best-practices-setting-jenkins-auditing-and-compliance)
 1. [Oracle Solaris ZFS](https://docs.oracle.com/cd/E23823_01/html/819-5461/zfsover-2.html)
 1. [Smart and efficent backup and restores](https://www.cloudbees.com/blog/why-smart-efficient-backup-and-restore-techniques-are-essential-jenkins-production-server)
+1. [Groovy scripts](https://github.com/jenkinsci/jenkins-scripts)
