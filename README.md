@@ -824,11 +824,44 @@ Folders can be nested like file system folders
 
 You can clone an existing folder leaving the children not damaged.
  - Clone from `MY_JOB` to `MY_CLONE`. `MY_JOB` stays intact
-Folders can dfine properties like assigning credentials only visible to jobs inside them
+Folders can define properties like assigning credentials only visible to jobs inside them
 
 You can use Folders with the Role-Based Access Control plugin to enable folder-level 
 security roles. By default, the roles are inherited by sub-folders.
 
+### Lab: Organize Folders and Views
+
+Create a TeamA folder with jenkins-admins and jenkins-developers groups
+  - This object will not inherit the global security security settings, 
+  or any permissions from its ancestors. Only permissions explicitly 
+  enabled in properties with `Do not inherit permissions from other ACL's` granted.
+Move `pipeline-job` to Team A
+
+
+New Item -> Call it `Team B` Copy from `Team A` with the same config as Team A.
+  - the pipeline-job in `TeamB` folder is greyed out. 
+    This is because any job you copy is disabled or rather, not buildable by default.
+    You usually don't recognize it because the form opens and you change things and 
+    upon saving the job becomes buildable. You can disable the project and enable it 
+    back to see the Build Now option on the left hand side menu
+
+On both `Team A` & `Team B` behave as independent jobs, because 
+when an existing folder is copied the jobs stay intact.
+
+- `docker exec -it jenkins /bin/bash` to launch bash sheel
+- `diff -u TeamA/config.xml TeamB/config.xml`
+
+```xml
+--- Team A/config.xml
++++ Team B/config.xml
+@@ -1,5 +1,6 @@
+ <?xml version='1.1' encoding='UTF-8'?>
+ <com.cloudbees.hudson.plugins.folder.Folder plugin="cloudbees-folder@6.11.1">
++  <actions/>
+   <description></description>
+   <properties>
+     <com.cloudbees.hudson.plugins.folder.properties.AuthorizationMatrixProperty>
+```
 
 
 ### Going Further
