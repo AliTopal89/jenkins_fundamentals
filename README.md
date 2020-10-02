@@ -816,6 +816,19 @@ connect status 128 error cause you gotta add the credentials
 - run and expect to see `echo "Some secret admin task here"`
 - once you login as `colleague` you shouldn't be able to see this admin task
 
+### Organize Builds
+
+Use `Folders` to organize large number of builds around taxonomies (organizes its data into categories and subcategories)
+such as projects or departments
+Folders can be nested like file system folders
+
+You can clone an existing folder leaving the children not damaged.
+ - Clone from `MY_JOB` to `MY_CLONE`. `MY_JOB` stays intact
+Folders can dfine properties like assigning credentials only visible to jobs inside them
+
+You can use Folders with the Role-Based Access Control plugin to enable folder-level 
+security roles. By default, the roles are inherited by sub-folders.
+
 
 
 ### Going Further
