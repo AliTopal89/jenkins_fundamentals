@@ -862,7 +862,18 @@ when an existing folder is copied the jobs stay intact.
    <properties>
      <com.cloudbees.hudson.plugins.folder.properties.AuthorizationMatrixProperty>
 ```
+### Monitor Jenkins
 
+Understand how resources are being used before taking actions on it.
+Define Build Logs and System Logs
+
+For metrics:
+  - You can use box metricks, or build time or agent related plugins
+
+Metric Aggregator is recommended
+  - When the metrics-aggregation-plugin is installed, there is a metrics 
+  view available on every build, showing the metrics collected 
+  from the available sources for this build.
 
 ### Going Further
 1. [Distributed Builds](https://wiki.jenkins.io/display/jenkins/distributed+builds)
