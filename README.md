@@ -875,7 +875,64 @@ Metric Aggregator is recommended
   view available on every build, showing the metrics collected 
   from the available sources for this build.
 
-### Going Further
+### Backup and Restore
+
+Recover an old configuration and have your backup strategy to include a validatio for each backup
+
+#### Backup Tools
+- Filesystem snapshots:
+  - faster thanlive backups, supported by Linux Logical Volume Manager(LVM), Solaris ZFS
+    - ZFS uses the concept of storage pools to manage physical storage.
+      ZFS eliminates volume management altogether. Instead of forcing you 
+      to create virtualized volumes, ZFS aggregates devices into a storage pool.
+      
+      The storage pool describes the physical characteristics of the storage 
+      (device layout, data redundancy, and so on) and acts as an arbitrary data 
+      store from which file systems can be created. File systems are no longer constrained 
+      to individual devices, allowing them to share disk space with all file systems in the pool.
+- Plugins:
+  - Most are outdated but there is [thinBackup](https://github.com/jenkinsci/thin-backup-plugin) plugin
+    - *thinkBackups* can be scheduled and only backs up the most vital configuration info.
+- Write a shell script:
+  - Use a cron job
+  - Create it on `/mnt/backup`, as a seperate filesystem with its own mount point. 
+    Or in a subdirectory to `/var/`
+  - Create a unique identifier for backups such as timestamp
+  - Consider copying the completed backup to a remote backup server or device for long term storage.
+
+#### Backup JENKINS_HOME
+- Whole $JENKINS_HOME directory can be backed up. To restore the system, just copy the entire
+backup to the new system.
+
+#### Backup Configuration files
+- Configuration files are directly stored in $JENKINS_HOME directory and `./config.xml` is the main jenkins
+  configuration files and other configuration files also has the `.xml` suffix. 
+- Config files can also be stored in and SCM repository (not a bad idea unless you have sensitive data).
+
+#### Backup ./jobs
+- `$JENKINS_HOME/jobs` contains informaion related to all jobs you create
+- `./builds` contains build records and `./builds/archive` has archived artifacts that maybe too large to backup.
+- `./workspace` Contains files from SCM no that important to backup but you can do clean 
+  checkout after restoring the system.
+    - `git clean -fdx` force cleans the working tree by recursively removing files and 
+    removing all untracked files that are not under version control, starting from the current directory.
+- `./plugins/*.hpi` & `./plugins/*jpi` plugin packages with specified versions used
+- no need to backup `./war` `./cache` , `./plugins/xxx`(subdirectories of plugins), `./tools` 
+
+###### What is an artifact?
+> Think of what an artifact really is. The Egyptians created wonderful artifacts such as pottery. 
+> But, if you were holding an Egyptian bowl in your hand, you wouldn't refer to it as an "artifact" 
+> unless you were discussing the fact that it IS an artifact (fact). You would refer to it as a bowl. 
+> They ate out of the bowl. They didn't eat out of the artifact.
+
+#### Backup Validation
+
+- set $JENKINS_HOME to a specific directory and specify a random HTTP port so it doesn't collide with the real instance
+  - `export JENKINS_HOME=mnt/backup-test`
+  - `java -jar jenkins.war httpPort=9999`
+
+
+### Going Further and reference guide
 1. [Distributed Builds](https://wiki.jenkins.io/display/jenkins/distributed+builds)
 1. [Distributed Builds Architecture](https://www.jenkins.io/doc/book/architecting-for-scale/#distributed-builds-architecture)
 1. [So you wanna build the world's largest Jenkins cluster](https://www.cloudbees.com/sites/default/files/2016-jenkins-world-soyouwanttobuildtheworldslargestjenkinscluster_final.pdf)
@@ -884,4 +941,5 @@ Metric Aggregator is recommended
 1. [LDAP vs. ActiveDirectory](https://www.varonis.com/blog/the-difference-between-active-directory-and-ldap/)
 1. [Matrix Based Security](https://wiki.jenkins.io/display/jenkins/matrix-based+security)
 1. [Auditing best practices](https://www.cloudbees.com/blog/best-practices-setting-jenkins-auditing-and-compliance)
-
+1. [Oracle Solaris ZFS](https://docs.oracle.com/cd/E23823_01/html/819-5461/zfsover-2.html)
+1. [Smart and efficent backup and restores](https://www.cloudbees.com/blog/why-smart-efficient-backup-and-restore-techniques-are-essential-jenkins-production-server)
