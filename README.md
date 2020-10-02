@@ -1027,7 +1027,7 @@ downloaded locally
 `TCP port for inbound agents` must be correctly configured to ensure that Jenkins CLI will work, using port 50000
 
 - Go to `http://localhost:5000/jenkins/user/<username>/configure` and add new API token
-- Cick add new token and generate the token and save it somewhere 110e0046f3a0a81047c75df4334acc59bb
+- Cick add new token and generate the token and save it somewhere
 
 - Use the the jenkins private url `http://jenkins:8080/jenkins` instead of the public one, this allows us to reach to
 jenkins directly instead of using a reverse-proxy
