@@ -67,6 +67,31 @@ continuous delivery process as code.
       }
     }
     ```
+#### Declarative VS Scripted pipeline
+
+Both definitions are stored in a jenkinsfile under SCM (pipeline-as-code)
+Both can use steps to build into pipeline or provided in plugins
+Both support shared libraries
+ - Scripted Pipeline:
+   - Executed sequentially from top to bottom
+   - Limitations are groovy lang limitations
+ - Declarative Pipeline
+   - Stricter, pre-defined structure
+   - Execution may resume after interruptions
+   - Using blue ocean simplfies the pipeline creation even more
+   - Use the `script` step to include bits of code when you need capabilites beyond declarative syntax
+
+**Classic web UI** provides tools such as Declarative Directive Generator and Snippet Generator
+  - **Declarative Generator**:
+    - The Directive Generator allows you to generate the Pipeline code for a Declarative Pipeline directive, such as agent, options, when, and more. Choose the directive you're interested in from the dropdown, and then choose the contents of the directive from the new form. Once you've filled out the form with the choices and values you want for your directive, click Generate Declarative Directive and the Pipeline code will appear in the box below. You can copy that code directly into the pipeline block in your Jenkinsfile, for top-level directives, or into a stage block for stage directives.
+  - **Snippet Generator**:
+    - will help you learn the Pipeline Script code which can be used to define various steps. Pick a step you are interested in from the list, configure it, click Generate Pipeline Script, and you will see a Pipeline Script statement that would call the step with that configuration. You may copy and paste the whole statement into your script, or pick up just the options you care about. (Most parameters are optional and can be omitted in your script, leaving them at default values.)
+
+**Blue Ocean pipeline editor** generates a Jenkinsfile and stores it in the source code repo. 
+  - Allows you to add/remove config stages and steps with a GUI
+  - Provides visualization for the pipeline run, becomes handy with parallel steps especially
+  - the GUI doesn't support all features such as `build now` `build with params` classic web UI option
+  - Supports apply options to the pipeline, and use the `when` directive. `post` section of your job is supported on blue ocean.
 
 **Benefits**: 
   - Jenkins master can restart and Pipeline continues to run (durable), 
