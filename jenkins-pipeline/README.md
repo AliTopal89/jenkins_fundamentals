@@ -107,5 +107,73 @@ Both support shared libraries
   - Decentralization of job configurations
     - *A decentralized model empowers individual teams to make decisions based on their own needs not some pre-configured corporate policy.*
 
+### Create Pipeline
+
+Declarative pipeline keeps the complex logic of individual steps seperate from the pipeline itself, making the pipeline code clean to read
+
+#### SCM with blue ocean and first pipeline
+- New Pipeline -> Git -> for training purposes [use](http://localhost:5000/gitserver/butler/pipeline-demo)
+- When supplied with a valid URL, Jenkins detects that the repo is available for SSH access and auto generates an SSH key
+  with git, github, gitea supports ssh out of the box, so it puts the public part of the ssh key into the remote blue ocean server.
+- Blue Ocean displays the generated ssh key for the user
+
+- A `stage` groups task to be done; it includes steps
+  - Stages are the logical segmentation of a pipeline
+- A `step` defines the actual task (test/commands to run, script to execute)
+- The pipeline code executes on master
+- Most of the stage blocks executes on agents
+
+- Create a Buzz Buzz Stage on `any` agent select print message `step` on Buzz Buzz `stage`, commit, save & run
+- With Blue ocean it created Jenkinsfile
+  ```groovy
+    pipeline {
+      agent any
+      stages {
+        stage('Buzz Buzz') {
+          steps {
+            echo 'Bees Buzz!'
+          }
+        }
+      }
+    }
+  ```
+  - cmd+S on mac brings the jenkinsfile pipeline script to edit. 
+  - for declarative pipeline, the first line is the `pipeline` block
+  - `agent` specifies where the pipeline or specific `stage` executes
+  - `stage` conceptually a distinct subset of the pipeline, Used to present pipeline status/progress.
+  - `steps` A series of distinct tasks inside a stage. 
+
+### Lab - Create first pipeline
+- New Pipeline -> Git -> add ssh [url](http://localhost:5000/gitserver/butler/pipeline-lab)
+- Final pipeline should be
+```groovy
+pipeline {
+  agent any
+  stages {
+    stage('Fluffy Build') {
+      steps {
+        echo 'Placeholder'
+        sh 'echo Edited Placeholder'
+      }
+    }
+
+    stage('Fluffy Test') {
+      steps {
+        sh 'sleep 5'
+        sh 'echo Success!'
+      }
+    }
+
+    stage('Fluffy Deploy') {
+      steps {
+        echo 'Placeholder'
+      }
+    }
+
+  }
+}
+```
+
 ### Further Reading and References
 1. [Decentralied ci-cd vs centralized](https://medium.com/@oprearocks/centralized-vs-decentralized-ci-cd-strategies-for-multiple-teams-dd1ba792c1ac)
+1. [Sections, Directives, Options, Matrix](https://www.jenkins.io/doc/book/pipeline/syntax/)
