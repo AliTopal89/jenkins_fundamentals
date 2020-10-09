@@ -329,6 +329,22 @@ Generates valid code for Scripted Pipeline steps, based on desired task, which c
 
 When needed, the Snippet Generator provides forms/checklists where you provide arguments for fields used for selected step.
 
+#### Multibranch
+
+Jenkins creaetes a subproject for each branch in SCM repo.
+Recommended for all new pipelines because, 
+  - automatic workflow creation for each new branch in the repo
+  - Builds are specific to that branch, its unique SCM change and build history
+  - Automatic prunning/deleteion for branches deleted in scm repo.
+  - Ability to override the parent properties for a specific branch if necessary such as:
+    - `$class PipelineProperty` - Configure a task name and which stage the project 
+    should be grouped by in the delivery pipeline view.
+    - `readTrusted` From a multibranch Pipeline project, reads a file from 
+    the associated SCM and returns its contents. Thus `readTrusted 'subdir/file'` is similar to 
+    `node {checkout scm; readFile 'subdir/file'}`.
+
+
+
 
 ##### Note: 
 - recursively: constituting a procedure that can repeat itself
