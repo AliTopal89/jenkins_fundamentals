@@ -292,6 +292,44 @@ pipeline {
 }
 ```
 
+### Scripted Pipeline
+
+Differs from Declarative where:
+  - its more flexible, allows more complexity
+  - can be more difficult to learn and use
+
+Simple Scripted pipeline
+  ```groovy
+    stage('Build') {
+        parallel linux: {
+            node('linux') {
+                checkout scm
+                try {
+                    sh 'make'
+                }
+                finally {
+                    junit '**/target/*.xml'
+                }
+            }
+        },
+        windows: {
+            node('windows') {
+                /* .. snip .. */
+            }
+        }
+    }
+  ```
+  - uses `node` instead of `agent`, 
+  - no `pipeline` block, 
+  - must explicitly handle `checkout scm`
+
+#### pipeline-sytax
+ 
+Generates valid code for Scripted Pipeline steps, based on desired task, which can be also used for declarative pipelines.
+
+When needed, the Snippet Generator provides forms/checklists where you provide arguments for fields used for selected step.
+
+
 ##### Note: 
 - recursively: constituting a procedure that can repeat itself
 - recursion: occurs when a thing is defined in terms of itself or of its type. 
