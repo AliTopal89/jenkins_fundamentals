@@ -343,6 +343,49 @@ Recommended for all new pipelines because,
     the associated SCM and returns its contents. Thus `readTrusted 'subdir/file'` is similar to 
     `node {checkout scm; readFile 'subdir/file'}`.
 
+#### Pipeline Stage View
+
+Shows a matrix with build history and stages as dimensions, is an alternative to blue ocean display
+Displays pipeline Data, just as Blue ocean does
+- Date time changes per build
+- Execution Time per build and per stage
+- Status and Output logs per stage
+- You can replay a build but not start a new build on blue ocean at our work jenkins
+
+#### Reference Documentation
+
+- Pipeline Syntax
+```groovy
+pipeline {
+    /* insert Declarative Pipeline here */
+} 
+```
+  - Sections in Declarative Pipeline typically contain one or more Directives or Steps.
+    - Directives
+      - envrionment - specifies a sequence of key-value pairs which will be 
+      defined as environment variables for all steps, or stage-specific steps 
+        - eg: `AN_ACCESS_KEY = credentials('my-predefined-secret-text')` 
+      - options - directive allows configuring Pipeline-specific options from within the Pipeline itself.
+        - eg: `timestamper`, `buildDiscarder(logRotator(numToKeepStr: '1')) }` etc.
+      - paramaters - directive provides a list of parameters that a user should provide when triggering the Pipeline
+        - eg: `parameters { string(name: 'DEPLOY_ENV', defaultValue: 'staging', description: '') }`
+      - [flow control](https://www.jenkins.io/doc/book/pipeline/syntax/#flow-control)
+  - Steps
+     Fundamentally, steps tell Jenkins what to do and serve as the basic building 
+     block for both Declarative and Scripted Pipeline syntax.
+  - Steps Provided by Plugins - Each plugin link offers more information about the parameters for each step.
+    - eg: Adds support for standard ANSI escape sequences, including color, to Console Output.
+      - `wrap([$class: 'AnsiColorBuildWrapper'])`
+    - eg: Allows to configure various aspects of the JaCoCo code coverage report.
+        ```groovy
+            stage('Build') {
+              steps {
+                  sh './jenkins_build.sh'
+                  junit '*/build/test-results/*.xml'
+                  step( [ $class: 'JacocoPublisher' ] )
+              }
+            }
+        ```
 
 
 
