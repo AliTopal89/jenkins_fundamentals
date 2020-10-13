@@ -406,6 +406,56 @@ pipeline {
             }
         ```
 
+### Agents
+
+In a Jenkins cluster, a `node` is a machine ready to take any build workload
+The global agent section must be defined in a `pipeline` block at top level or it can ve defined at each `stage('...')`
+- `agent any`  - Stage can execute on any node
+- `agent none` - Do not define an agent
+  - Use for global `agent` to allow you to specify particular nodes for each `stage`
+  - Use for a stage that must execute without an agent
+  - Do noy use agent none for steps that execute a shell command or do other activities that require an agent
+- `agent { label '' }` - agent specified by a specific label aka - `agent { label 'jenkins-ecs-rails' }`
+- `agent { node }` - like agent label but allows more specifications
+
+#### Docker agent
+
+Docker is a tool that can package an application and its dependencies in a virtual 
+container that can run on any Linux server.
+A Docker container is self sufficient running on an isolated process.
+Docker containers can be used as the agent to provide a build environment
+- `agent { docker }` - allows container to to dynamically provision a docker container as a Jenkins agent node, 
+let that run a single build, then tear-down that node, without the build process (or Jenkins job definition) 
+requiring any awareness of docker.
+  - ```groovy
+    agent {
+        docker {
+            image 'myregistry.com/node'
+            label 'my-defined-label'
+            registryUrl 'https://myregistry.com/'
+            registryCredentialsId 'myPredefinedCredentialsInJenkins'
+        }
+    }
+    ```
+
+- `agent { dockerfile }` - Execute the Pipeline, or stage, with a container built from a Dockerfile contained in the source repository.
+  - ```groovy
+        agent {
+        dockerfile {
+            filename 'Dockerfile.build'
+            dir 'build'
+            label 'my-defined-label'
+            additionalBuildArgs  '--build-arg version=1.0.2'
+            args '-v /tmp:/tmp'
+        }
+    }
+    ```
+When you specify a docker container for an agent, Jenkins calls APIs directly these command are serialized so they can
+resume after master jenkins restart from `/restart`. eg. yet another docker plugin with `docker-jenkins-rails` agents.
+
+When you use a shell step to run a docker command directly the step is bound to the durable task of the shell
+  - The docker container and any tasks running in the container are terminated when the shell terminates
+
 
 
 ##### Note: 
