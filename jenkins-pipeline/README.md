@@ -455,7 +455,40 @@ resume after master jenkins restart from `/restart`. eg. yet another docker plug
 
 When you use a shell step to run a docker command directly the step is bound to the durable task of the shell
   - The docker container and any tasks running in the container are terminated when the shell terminates
+  - Run all pipeline stages on a contanier based image `bzzzcentos:7`:
+    - ```groovy
+          pipeline {
+            agent { docker 'bzzzcentos:7' }
+          }
+      ```
+#### Per stage agent syntax
 
+```groovy
+   pipeline {
+      agent none
+      stages {
+        stage('Build'){
+          agent { label 'buzzzmaven' }
+          steps {
+              sh 'echo my build'
+              sh './jenkins_build.sh'
+          } //steps 
+        } // Build
+
+        stage('Deploy') {
+          agent { label 'buzzprod' }
+          steps {
+            sh 'echo buzz prod deploy'
+            sh './jenkins/deploy.sh'
+          }
+        }
+      }
+   }
+```
+
+- Do not run stages on an agent by default
+- Run build stage on node machine tagged `buzzmaven`
+- Run deploy stage on node machine tagged `buzzprod`
 
 
 ##### Note: 
