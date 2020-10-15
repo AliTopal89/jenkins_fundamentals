@@ -496,6 +496,21 @@ Change global agent to `none` and use `jdk7` & `jdk8` for build and test steps
 - Select `Settings` from **Buzz Build** stage and **Buzz Test** stages with node label `java7`
 - Add `java8` Build steps as is with `java7` on **Buzz Build** specify java8 node based environment
   variable for `${BUZZ_NAME}`
+
+
+### Stash/Unstash
+
+Stashed large files consumes significant resources on both Master and agent nodes
+- Good options
+  - [External Workspice Manager]('https://github.com/jenkinsci/external-workspace-manager-plugin')
+    - There may be cases when you have more than one Node with the same label. Instead of specifying 
+    the same External Workspace Node properties for multiple Nodes that share the same label, 
+    you can make use of the External Workspace Templates from the Jenkins global config.
+
+    - external repo such as artifactory and nexus
+    - Artifact Manager on S3 plugin:  that allow you to store your artifacts into a 
+    S3 Bucket on Amazon. The use of this S3 Bucket as a artifact storage is transparent to 
+    Jenkins and your jobs,
  
 ##### Note: 
 - recursively: constituting a procedure that can repeat itself
