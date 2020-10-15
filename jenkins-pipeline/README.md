@@ -490,7 +490,13 @@ When you use a shell step to run a docker command directly the step is bound to 
 - Run build stage on node machine tagged `buzzmaven`
 - Run deploy stage on node machine tagged `buzzprod`
 
+#### Specify agents for pipeline
 
+Change global agent to `none` and use `jdk7` & `jdk8` for build and test steps
+- Select `Settings` from **Buzz Build** stage and **Buzz Test** stages with node label `java7`
+- Add `java8` Build steps as is with `java7` on **Buzz Build** specify java8 node based environment
+  variable for `${BUZZ_NAME}`
+ 
 ##### Note: 
 - recursively: constituting a procedure that can repeat itself
 - recursion: occurs when a thing is defined in terms of itself or of its type. 
