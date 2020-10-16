@@ -520,7 +520,42 @@ a set of [Ant-style](https://stackoverflow.com/a/8821223) include patterns.
 
 - [Stash Unstash Exercise](../pipeline-exercise/stash-exercise.md)
 
+#### Interactive Input
 
+Jenkins provides the ability to pause a pipeline for manual input, like confirmation before deployment
+It is implemented asa a step usually within its own stage and should run on `agent none`, use a timeout
+parameter to avoid infinite waiting.
+
+```groovy
+stage('Confirm Deploy to Staging') {
+      steps {
+        timeout(time: 40, unit: 'SECONDS') {
+          input(message: 'Do you want to deploy to staging?', ok: 'Yes, lets do it!')
+        }
+      }
+    }
+
+```
+
+#### Deploying from Jenkins pipeline
+
+Create a new stage with an `agent` because it cannot be combined with "wait for input" stage
+Unstash the **Buzz Java 8** as the first step before deploying to staging
+
+```groovy
+stage('Deploy to Staging') {
+      agent {
+        node {
+          label 'java8'
+        }
+
+      }
+      steps {
+        unstash 'Buzz Java 8'
+        sh './jenkins/deploy.sh staging'
+      }
+    }
+```
 
 ##### Note: 
 - recursively: constituting a procedure that can repeat itself
