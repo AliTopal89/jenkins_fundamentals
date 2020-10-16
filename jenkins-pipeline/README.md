@@ -511,7 +511,17 @@ Stashed large files consumes significant resources on both Master and agent node
     - Artifact Manager on S3 plugin:  that allow you to store your artifacts into a 
     S3 Bucket on Amazon. The use of this S3 Bucket as a artifact storage is transparent to 
     Jenkins and your jobs,
- 
+
+`stash` and `unstash` are implemented as `steps` within a `stage`
+- stash requires `name` parameter, which is a simple identifier for the set of files being stashed.
+You can use optional parameter `includes` to store files from another directory which accepts
+a set of [Ant-style](https://stackoverflow.com/a/8821223) include patterns.
+- Optionally use the `dir` step to create a directory where the files will be written to `unstash`.
+
+- [Stash Unstash Exercise](pipeline-exercise/stash-exercise.md)
+
+
+
 ##### Note: 
 - recursively: constituting a procedure that can repeat itself
 - recursion: occurs when a thing is defined in terms of itself or of its type. 
