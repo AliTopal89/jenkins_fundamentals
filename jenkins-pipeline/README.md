@@ -518,7 +518,7 @@ You can use optional parameter `includes` to store files from another directory 
 a set of [Ant-style](https://stackoverflow.com/a/8821223) include patterns.
 - Optionally use the `dir` step to create a directory where the files will be written to `unstash`.
 
-- [Stash Unstash Exercise](pipeline-exercise/stash-exercise.md)
+- [Stash Unstash Exercise](../pipeline-exercise/stash-exercise.md)
 
 
 
