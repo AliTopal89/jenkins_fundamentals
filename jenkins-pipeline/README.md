@@ -536,9 +536,6 @@ stage('Confirm Deploy to Staging') {
     }
 
 ```
-### Lab: Multi Environment Pipeline
-
-[Multi ENV Pipeline Lab](../pipeline-exercise/multi-env-pipeline-lab.md)
 
 #### Deploying from Jenkins pipeline
 
@@ -567,6 +564,10 @@ stage('Deploy to Staging') {
   where a function being defined is applied within its own definition.
 - ambiguity: the quality of being open to more than one interpretation; inexactness. 
 - idle: without purpose or effect
+
+### Lab: Multi Environment Pipeline
+
+[Multi ENV Pipeline Lab](../pipeline-exercise/multi-env-pipeline-lab.md)
 
 ### Further Reading and References
 1. [Decentralied ci-cd vs centralized](https://medium.com/@oprearocks/centralized-vs-decentralized-ci-cd-strategies-for-multiple-teams-dd1ba792c1ac)
