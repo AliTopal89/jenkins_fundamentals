@@ -145,34 +145,7 @@ Declarative pipeline keeps the complex logic of individual steps seperate from t
 
 ### Lab - Create first pipeline
 - New Pipeline -> Git -> add ssh [url](http://localhost:5000/gitserver/butler/pipeline-lab)
-- Final pipeline should be
-```groovy
-pipeline {
-  agent any
-  stages {
-    stage('Fluffy Build') {
-      steps {
-        echo 'Placeholder'
-        sh 'echo Edited Placeholder'
-      }
-    }
-
-    stage('Fluffy Test') {
-      steps {
-        sh 'sleep 5'
-        sh 'echo Success!'
-      }
-    }
-
-    stage('Fluffy Deploy') {
-      steps {
-        echo 'Placeholder'
-      }
-    }
-
-  }
-}
-```
+- [Final First Pipeline script](../pipeline-exercise/first-pipeline-lab.md)
 
 ### Pipeline to a Branch
 
@@ -239,58 +212,8 @@ Pipeline doesn't support arbitrary parallel stage depth (you cannot have paralle
 How Parallel Stages are scheduled: Multiple parallel steps execute on the same node while others are idle.
 
 ### Lab - Simple pipeline with parallel stages
+ [Parallel Stages in pipeline](../pipeline-exercise/parallel-stage-lab.md)
 
-```groovy
-pipeline {
-  agent any
-  stages {
-    stage('Fluffy Build') {
-      steps {
-        sh './jenkins/build.sh'
-        archiveArtifacts 'target/*.jar'
-      }
-    }
-
-    stage('Fluffy Test') {
-      parallel {
-        stage('Backend') {
-          steps {
-            sh './jenkins/test-backend.sh'
-            junit 'target/surefire-reports/**/TEST*.xml'
-          }
-        }
-
-        stage('Frontend') {
-          steps {
-            sh './jenkins/test-frontend.sh'
-            junit 'target/test-results/**/TEST*.xml'
-          }
-        }
-
-        stage('Performance') {
-          steps {
-            sh './jenkins/test-performance.sh'
-          }
-        }
-
-        stage('Static') {
-          steps {
-            sh './jenkins/test-static.sh'
-          }
-        }
-
-      }
-    }
-
-    stage('Fluffy Deploy') {
-      steps {
-        sh './jenkins/deploy.sh staging'
-      }
-    }
-
-  }
-}
-```
 
 ### Scripted Pipeline
 
