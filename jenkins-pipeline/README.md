@@ -536,6 +536,9 @@ stage('Confirm Deploy to Staging') {
     }
 
 ```
+### Lab: Multi Environment Pipeline
+
+[Multi ENV Pipeline Lab](../pipeline-exercise/multi-env-pipeline-lab.md)
 
 #### Deploying from Jenkins pipeline
 
