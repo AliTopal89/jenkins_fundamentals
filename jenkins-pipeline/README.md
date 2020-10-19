@@ -528,8 +528,48 @@ pipeline {
 }
 ```
 
+#### Environment Directive
+Sequence of key-value pairs that are defined as environment variables specifies for all steps or individual ones
+`withEnv` inside a `steps` block can be specified for one or more *but not all* steps within a stage.
+
+Pipeline DSL uses Groovy Syntax for dereferencing single and double quoted variables
+ - Single vs Double quote: Most important difference. Single-quoted is ordinary Java-like string. 
+ Double-quoted is a GString, and it allows **string-interpolation**. I.e. you can have expressions 
+ embedded in it: `println("${40 + 5}")` prints `45`, while `println('${ 40 + 5}')` will produce 
+ `${ 40 + 5}`. This expression can be pretty complex, can reference variables or call methods.
+
+global pipeline examples can be seen in `/jenkins-url/pipeline-syntax/globals` such as
+`BUILD_TAG` - String of `jenkins-${JOB_NAME}-${BUILD_NUMBER}`. Convenient to put into a 
+resource file, a jar file, etc for easier identification.
+
+```groovy
+pipeline {
+  agent any 
+  environment {
+      CC = 'king kobold'
+  }
+
+  stages {
+    stage('Example'){
+      environment {
+        SUPER_SECRET_KEY = credentials('warlocks-are-cool')
+      }
+      steps {
+        sh 'printenv'
+      }
+    }
+  }
+}
+```
+- The first `environment` blockt applies to whole pipeline the latter is for only that `stage Example`
+
+
+##### Notes:
+- dereferencing syntax: the dollar sign `"$"` is the dereference operator, used to translate 
+the name of a variable into its contents, and is notably absent when assigning to a variable
 
 ### Further Reading and References
 1. [Decentralied ci-cd vs centralized](https://medium.com/@oprearocks/centralized-vs-decentralized-ci-cd-strategies-for-multiple-teams-dd1ba792c1ac)
 1. [Sections, Directives, Options, Matrix](https://www.jenkins.io/doc/book/pipeline/syntax/)
 1. [Guide to deploying artifacts with jenkins](https://codurance.com/training/2014/10/03/guide-to-deploying-artifacts-with-jenkins/)
+1. [Freestyle Jenkins Project](https://wiki.jenkins.io/display/JENKINS/Building+a+software+project)
