@@ -492,6 +492,43 @@ stage('Deploy to Staging') {
 
 [Multi ENV Pipeline Lab](../pipeline-exercise/multi-env-pipeline-lab.md)
 
+### Post Section
+
+Post section is divided into conditions such as `always` `success` `aborted` `failure`.
+These condition blocks allow the execution of steps inside each condition depending 
+on the completion status of the Pipeline or stage, but an error in post section doesn't make 
+the pipeline run unsuccessful.
+
+Particularly useful for archiving artifacts and storing test results.
+```groovy
+pipeline {
+  stages {
+    stage('Buzz Build') {
+      parallel {
+        stage('Build Java 7') {
+          steps {
+            sh """
+               echo I am $BUZZ_NAME
+               ./jenkins/build.sh
+               """
+          }
+          post {
+            always {
+              archiveArtifacts(artifacts: 'target/*.jar', fingerprint: true)
+            }
+
+            success {
+              stash(name: 'Buzz Java 7', includes: 'target/**')
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+
 ### Further Reading and References
 1. [Decentralied ci-cd vs centralized](https://medium.com/@oprearocks/centralized-vs-decentralized-ci-cd-strategies-for-multiple-teams-dd1ba792c1ac)
 1. [Sections, Directives, Options, Matrix](https://www.jenkins.io/doc/book/pipeline/syntax/)
