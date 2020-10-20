@@ -563,11 +563,86 @@ pipeline {
 ```
 - The first `environment` blockt applies to whole pipeline the latter is for only that `stage Example`
 
+#### Notifications
+
+Email & Slack notifications for when a build starts and succeeds or fails.
+sample notifications come with build url, job name and build id, but you can
+add any global environment variables to notifications for additiona information.
+
+```groovy
+post {
+  failure {
+    slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      emailext (
+        subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+        body: """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+        <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+        recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+        )
+    }
+}
+```
+#### When Directive
+
+Supports nested conditions(`not`, `allOf`, or `anyOf`) that mut be met for a pipeline to execute a `stage`.
+- ```groovy
+  when {
+    branch 'master'
+  }
+  ```
+  branch - **execute the** `stage` *when* the branch being built matches the pattern, in this case the master branch
+
+- ```groovy
+  when {
+    environment name: 'DEPLOY_TO', value: 'production'
+  }
+  ```
+  environment - **execute the** `stage` *when* the specified variable is set to given value
+
+- ```groovy
+  when {
+    expression {
+        fileExists('manifests/enjoi.yml')
+    }
+  }
+  ```
+  expression - **execute the** `stage` *when* the specified expression evaulates to true
+
+- ```groovy
+  when {
+    allOf {
+      branch 'master'
+      environment name: 'DEPLOY_TO', value: 'production'
+    }
+  }
+  ```
+  allOf - **execute the** `stage` *when* all nested conditions are true
+
+- ```groovy
+  when {
+    anyOf {
+      branch 'master'
+      branch 'staging'
+    }
+  }
+  ```
+  anyOf - **execute the** `stage` *when* atleast one nested conidition is true
+
+- ```groovy
+  when { not { branch 'master' } }
+  ```
+  not - **execute the** `stage` *when* the nested condition is false
+
+if the `when` directive has multiple conditions then all the conditions must return true, 
+which is similiar to using `allOf` condition
 
 ##### Notes:
 - dereferencing syntax: the dollar sign `"$"` is the dereference operator, used to translate 
 the name of a variable into its contents, and is notably absent when assigning to a variable
-
+- email-extension plugin [vulnerability](https://www.jenkins.io/security/advisory/2020-09-16/#SECURITY-1851) workaround:
+  - ```groovy
+       System.setProperty("mail.smtp.ssl.checkserveridentity", "true")`
+     ```
 ### Further Reading and References
 1. [Decentralied ci-cd vs centralized](https://medium.com/@oprearocks/centralized-vs-decentralized-ci-cd-strategies-for-multiple-teams-dd1ba792c1ac)
 1. [Sections, Directives, Options, Matrix](https://www.jenkins.io/doc/book/pipeline/syntax/)
