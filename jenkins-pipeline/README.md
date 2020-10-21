@@ -679,6 +679,20 @@ instead of the whole thing.
       sh 'env | grep GIT_'
     ```
 
+### Credentials
+
+get trusted access to resources without having to share the actual passwords
+are stored in an obfuscated form on the jenkins master
+
+An internal unique ID by which these credentials are identified from jobs and other 
+configuration. Normally left blank, in which case an ID will be generated, 
+
+System Credentials - Credentials where Jenkins instance itself is using the credential
+  - System credentials are accessible only from Jenkins configuration (e.g., plugins).
+Global Credentials = Most credentials are in called in the pipelines 
+  - Global credentials are the same as System but are also accessible from Jenkins jobs.
+
+
 ##### Notes:
 - dereferencing syntax: the dollar sign `"$"` is the dereference operator, used to translate 
 the name of a variable into its contents, and is notably absent when assigning to a variable
