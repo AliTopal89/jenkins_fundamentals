@@ -636,6 +636,49 @@ Supports nested conditions(`not`, `allOf`, or `anyOf`) that mut be met for a pip
 if the `when` directive has multiple conditions then all the conditions must return true, 
 which is similiar to using `allOf` condition
 
+#### Git Enviroment Variables
+
+`GIT_COMMIT`, `GIT_BRANCH`, `GIT_URL` are examples of variables that can be used within the pipeline
+
+for example:
+```groovy
+stage('Generate Reports') {
+  steps {
+    sh './jenkins/generate-report.sh'
+    sh 'tar -czv target/reports.tar.gz target/reports'
+    archiveArtifacts 'target/*.tar.gz'
+    echo 'Finished run for commit ${ env.GIT_COMMIT.substring(0,6) }'
+  }
+}
+```
+
+If you want to compare the contents of an archive, there needs to be a unique identifier in the name
+of each file like `GIT_COMMIT`, and use bash shell conventions to use just 6 characters of the commit
+instead of the whole thing.
+
+```groovy
+    sh 'tar -czv target/reports-${GIT_COMMIT:0:6}.tar.gz target/reports'
+    echo 'Finished run for commit ${ env.GIT_COMMIT.substring(0,6) }'
+```
+- ```groovy
+    post {
+      always {
+        mail (
+          to: 'clorox@lysol.com',
+          subject: "Finish build ${ env.BUILD_ID }, commit ${ env.GIT_BRANCH }, (${ env.GIT_COMMIT.substring(0,6) })",
+          body: 'Placeholder'
+        )
+      }
+    }
+  ```
+  - `subject:` line is in double quotes to surround the value
+
+  - GIT variables available to pipeline to `sh` step in Pipeline:
+    
+    ```groovy
+      sh 'env | grep GIT_'
+    ```
+
 ##### Notes:
 - dereferencing syntax: the dollar sign `"$"` is the dereference operator, used to translate 
 the name of a variable into its contents, and is notably absent when assigning to a variable
@@ -643,6 +686,9 @@ the name of a variable into its contents, and is notably absent when assigning t
   - ```groovy
        System.setProperty("mail.smtp.ssl.checkserveridentity", "true")`
      ```
+- Nested conditions: comprise condition statements contained within the definition of other condition statements
+
+
 ### Further Reading and References
 1. [Decentralied ci-cd vs centralized](https://medium.com/@oprearocks/centralized-vs-decentralized-ci-cd-strategies-for-multiple-teams-dd1ba792c1ac)
 1. [Sections, Directives, Options, Matrix](https://www.jenkins.io/doc/book/pipeline/syntax/)
