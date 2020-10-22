@@ -692,6 +692,52 @@ System Credentials - Credentials where Jenkins instance itself is using the cred
 Global Credentials = Most credentials are in called in the pipelines 
   - Global credentials are the same as System but are also accessible from Jenkins jobs.
 
+#### Credential Types
+
+- Secret Text:
+  - `MYVARNAME` contains the path of the file that contanis the Secret Text
+- Username Password combo:
+  - `MYVARNAME` is set to `<username>:<password>`
+  - `MYVARNAME_USR` is set for username and `MYVARNAME_PSW` is set for password
+- Jenkins' declarative Pipeline syntax has the credentials() helper method 
+(used within the environment directive) which supports `secret text`, `username and password`, 
+as well as `secret file` credentials.
+- environment variables created by the `credentials()` method will always be 
+appended with `_USR` and `_PSW` (i.e. in the format of an underscore followed by three capital letters).
+- For other credential types such as `SSH keys` or `certificates`, 
+then use Jenkins' `Snippet Generator` feature.
+  - Use `sshagent` step for ssh creds, `withCredentials` does not support it.
+- Using the Snippet Generator, you can make multiple credentials available within
+a single `withCredentials( …​ ) { …​ }` step. 
+- Plugin usage may differ, e.g. git and git client plugin allows username/password and private key credentials
+but does not allow secret text, certificates.
+
+```groovy
+stage('Deploy Reports') {
+  steps {
+    ...
+    withCredentials(bindings: [string[credentialsId:'my-elastic-key', variable: 'ELASTIC_ACCESS_KEY')]){
+        // ENV varaible available in the remote shell
+        sh "env | grep ELASTIC_ACCESS_KEY"
+        sh "echo ${ELASTIC_ACCESS_KEY} > booyakasha.txt"
+    }
+  }
+}
+```
+
+- `my-elastic-key` uses the credential that is defined with that ID
+- withCredentials binds that to a local pipeline variable caleed `ELASTIC_ACCESS_KEY`
+- The step uses the `ELASTIC_ACCESS_KEY` local pipeline variable to establish the credentials
+  that it needs.
+- bindings.string 
+  - Sets a variable to the text given in the credentials.
+- variable: 
+  - Name of an environment variable to be set during the build. 
+    The contents of this location are not masked.
+- credentialsId
+  - Credentials of an appropriate type to be set to the variable.
+
+
 
 ##### Notes:
 - dereferencing syntax: the dollar sign `"$"` is the dereference operator, used to translate 
