@@ -737,6 +737,28 @@ stage('Deploy Reports') {
 - credentialsId
   - Credentials of an appropriate type to be set to the variable.
 
+### Options and Configurations
+
+Are methods for controlling the characteristics and behaviours of the pipeline
+*Options* are set on declarative pipelines *configurations* are set on classic web UI
+
+```groovy
+options {
+  disableConcurrentBuilds()
+}
+```
+Using declarative directive generator to set options and and options syntax.
+
+another example:
+```groovy
+options {
+  buildDiscarder(logRotator(numToKeepStr: '30')
+}
+```
+[logrotator](https://github.com/jenkinsci/jenkins/blob/master/core/src/main/java/hudson/tasks/LogRotator.java#L111)
+`numToKeepStr`: only this number of build logs are kept.
+
+
 
 
 ##### Notes:
