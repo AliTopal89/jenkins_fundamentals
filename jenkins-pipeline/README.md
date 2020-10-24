@@ -661,7 +661,7 @@ instead of the whole thing.
       sh 'env | grep GIT_'
     ```
 
-### Credentials
+#### Credentials
 
 get trusted access to resources without having to share the actual passwords
 are stored in an obfuscated form on the jenkins master
@@ -719,7 +719,7 @@ stage('Deploy Reports') {
 - credentialsId
   - Credentials of an appropriate type to be set to the variable.
 
-### Options and Configurations
+#### Options and Configurations
 
 Are methods for controlling the characteristics and behaviours of the pipeline
 *Options* are set on declarative pipelines *configurations* are set on classic web UI
@@ -740,6 +740,74 @@ options {
 [logrotator](https://github.com/jenkinsci/jenkins/blob/master/core/src/main/java/hudson/tasks/LogRotator.java#L111)
 `numToKeepStr`: only this number of build logs are kept.
 
+#### Parameters
+
+provides a list of parameters a user should provide when triggering the pipeline. 
+the user-specified values with the `params` object.
+
+example params
+
+```groovy
+pipeline {
+  agent {label 'blah-blyat' }
+  parameters {
+    string(name: 'DEPLOY_TO', defaultValue: 'staging', description: 'deploy to staging env')
+  }
+}
+```
+
+#### Build Tools for steps
+
+- Make
+  - The original UNIX build script
+    - ```groovy
+         def clean() {
+            sh 'make clean'
+            deleteDir()
+        }
+        ...
+        post {
+            always { script { clean() } }
+        }
+      ```
+- Apache Ant
+  - Ant Plugin required
+
+    - ```groovy 
+       sh 'ant clean compile jar run'
+       ```
+- Apache Maven
+  - uses an xml file to describe the project, 
+  - includes predefined targets for common tasks such compiling and packaging,
+  - downloads libraries and plugins for necessary repos and puts them in cache on your local setup
+    - ```groovy
+       sh 'mvn clean install'
+      ```
+- Gradle
+  - Gradle is an open-source build automation tool that is designed to be flexible enough to build almost any type of software. 
+  - requires gradle plugin, uses domain specific language for project configuration,
+  - supports very large, multi project builds
+    - ```groovy
+       sh './gradlew clean test'
+      ```
+- NPM
+  - can install packages, manage dependencies and manage versions of packages
+  - require to run Grunt build tool for javascript, bower package manager for the web
+    - ```groovy
+       stage('Build') {
+         steps {
+           nodejs(nodeJSInstallationName: 'Node 6.x', configId: '<config-file-provider-id>') {
+             sh 'npm config ls'
+             sh 'npm build'
+             // sh 'npm run build'
+           }
+         }
+       }
+      ```
+
+the `tools` section defines the tools to auto-install and put on the `PATH`,
+and it is ignored if `agent none` is specified,
+`maven, jdk, gradle, nodejs` are supported on the tools section
 
 
 
@@ -751,6 +819,8 @@ the name of a variable into its contents, and is notably absent when assigning t
        System.setProperty("mail.smtp.ssl.checkserveridentity", "true")`
      ```
 - Nested conditions: comprise condition statements contained within the definition of other condition statements
+- Ant: main known usage of Ant is the build of Java applications. Ant supplies a number of built-in tasks allowing to compile, assemble, test and run Java applications
+- Domain Specific Lanugage (DSL): A programming language that has been designed with an application domain in mind. For example, a language specifically designed for modelling chemical processes, or another language designed for investment/trading at the stock exchange.
 
 
 ### Further Reading and References
@@ -758,3 +828,4 @@ the name of a variable into its contents, and is notably absent when assigning t
 1. [Sections, Directives, Options, Matrix](https://www.jenkins.io/doc/book/pipeline/syntax/)
 1. [Guide to deploying artifacts with jenkins](https://codurance.com/training/2014/10/03/guide-to-deploying-artifacts-with-jenkins/)
 1. [Freestyle Jenkins Project](https://wiki.jenkins.io/display/JENKINS/Building+a+software+project)
+1. [centralising jenkins pipeline](https://medium.com/@danielantelo/standardising-and-centralising-your-jenkins-ci-pipeline-e1e097785408)
