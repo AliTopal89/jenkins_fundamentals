@@ -809,6 +809,44 @@ the `tools` section defines the tools to auto-install and put on the `PATH`,
 and it is ignored if `agent none` is specified,
 `maven, jdk, gradle, nodejs` are supported on the tools section
 
+for example:
+
+```groovy
+pipeline {
+    agent any
+    tools {
+        maven 'Maven 3.3.9'
+        jdk 'jdk8'
+    }
+    stages {
+        stage ('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                '''
+                // the version configured in the tools section will be the first on the path.
+            }
+        }
+        stage ('Build') {
+            steps {
+                sh 'mvn -Dmaven.test.failure.ignore=true install'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/**/*.xml'
+                }
+            }
+        }
+    }
+}
+
+```
+- the values used to define each tool must be configured on the web UI under `Manage Jenkins` -> `Global Tool Configuration` 
+- `install` is one of the phases defined for the "default"
+  -  install the package into the local repository, for use as a dependency in other projects locally
+- when you run Maven with a phase maven executes in [order](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#a-build-lifecycle-is-made-up-of-phases)
+- if you want to archive reports for sucessfull Maven builds use `success` instead of `always` for post builds.
 
 
 ##### Notes:
@@ -829,3 +867,4 @@ the name of a variable into its contents, and is notably absent when assigning t
 1. [Guide to deploying artifacts with jenkins](https://codurance.com/training/2014/10/03/guide-to-deploying-artifacts-with-jenkins/)
 1. [Freestyle Jenkins Project](https://wiki.jenkins.io/display/JENKINS/Building+a+software+project)
 1. [centralising jenkins pipeline](https://medium.com/@danielantelo/standardising-and-centralising-your-jenkins-ci-pipeline-e1e097785408)
+1. [Maven build cycle](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html)
