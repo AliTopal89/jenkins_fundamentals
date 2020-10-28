@@ -78,7 +78,7 @@ Both support shared libraries
  - Declarative Pipeline
    - Stricter, pre-defined structure
    - Execution may resume after interruptions
-   - Using blue ocean simplfies the pipeline creation even more
+   - Using blue ocean simplifies the pipeline creation even more
    - Use the `script` step to include bits of code when you need capabilites beyond declarative syntax
 
 **Classic web UI** provides tools such as Declarative Directive Generator and Snippet Generator
@@ -90,14 +90,14 @@ Both support shared libraries
 **Blue Ocean pipeline editor** generates a Jenkinsfile and stores it in the source code repo. 
   - Allows you to add/remove config stages and steps with a GUI
   - Provides visualization for the pipeline run, becomes handy with parallel steps especially
-  - the GUI doesn't support all features such as `build now` `build with params` classic web UI option
+  - the GUI doesn't support all features such as `build now`, `build with params` classic web UI option
   - Supports apply options to the pipeline, and use the `when` directive. `post` section of your job is supported on blue ocean.
 
 **Benefits**: 
   - Jenkins master can restart and Pipeline continues to run (durable), 
   - can stop for manual approval (pausable),
   - supports typical CD requirements like fork, parallelize, loop, join (versatile),
-  - supports custom extensions to its DSl (Extensible),
+  - supports custom extensions to its DSL (Extensible),
     -  for example:
       - Create a new plugin project, either fork the simple build one, or add a dependency to it in your `pom.xml` / `build.gradle` file,
       - Put your dsl in the resources directory (note the "package dsl" declaration at the top)
@@ -140,7 +140,7 @@ Declarative pipeline keeps the complex logic of individual steps seperate from t
   - cmd+S on mac brings the jenkinsfile pipeline script to edit. 
   - for declarative pipeline, the first line is the `pipeline` block
   - `agent` specifies where the pipeline or specific `stage` executes
-  - `stage` conceptually a distinct subset of the pipeline, Used to present pipeline status/progress.
+  - `stage` conceptually a distinct subset of the pipeline, used to present pipeline status/progress.
   - `steps` A series of distinct tasks inside a stage. 
 
 ### Lab - Create first pipeline
@@ -172,7 +172,7 @@ Jenkins uses Fingerprints to keep track of artifacts without any ambiguity
 All artifacts of a build live in:
   - http://${JENKINS_URL}/job/${YOUR_JOB}/${BUILD_NUMBER}/artifact
 
-In production env, the build chain system (Maven, Gradle etc) publishes artifact to an artifacr repo
+In production env, the build chain system (Maven, Gradle etc) publishes artifact to an artifact repo
 like Artifactory, Nexus etc. 
 
 Each pipeline generates a `pipeline.log` artifact when it runs.
@@ -271,7 +271,7 @@ Recommended for all new pipelines because,
 
 Shows a matrix with build history and stages as dimensions, is an alternative to blue ocean display
 Displays pipeline Data, just as Blue ocean does
-- Date time changes per build
+- Date Time changes per build
 - Execution Time per build and per stage
 - Status and Output logs per stage
 - You can replay a build but not start a new build on blue ocean at our work jenkins
@@ -319,7 +319,7 @@ The global agent section must be defined in a `pipeline` block at top level or i
 - `agent none` - Do not define an agent
   - Use for global `agent` to allow you to specify particular nodes for each `stage`
   - Use for a stage that must execute without an agent
-  - Do noy use agent none for steps that execute a shell command or do other activities that require an agent
+  - Do not use agent none for steps that execute a shell command or do other activities that require an agent
 - `agent { label '' }` - agent specified by a specific label aka - `agent { label 'jenkins-ecs-rails' }`
 - `agent { node }` - like agent label but allows more specifications
 
@@ -355,7 +355,7 @@ requiring any awareness of docker.
         }
     }
     ```
-When you specify a docker container for an agent, Jenkins calls APIs directly these command are serialized so they can
+When you specify a docker container for an agent, Jenkins calls APIs directly as these command are serialized so they can
 resume after master jenkins restart from `/restart`. eg. yet another docker plugin with `docker-jenkins-rails` agents.
 
 When you use a shell step to run a docker command directly the step is bound to the durable task of the shell
@@ -407,7 +407,7 @@ Change global agent to `none` and use `jdk7` & `jdk8` for build and test steps
 
 Stashed large files consumes significant resources on both Master and agent nodes
 - Good options
-  - [External Workspice Manager]('https://github.com/jenkinsci/external-workspace-manager-plugin')
+  - [External Workspace Manager]('https://github.com/jenkinsci/external-workspace-manager-plugin')
     - There may be cases when you have more than one Node with the same label. Instead of specifying 
     the same External Workspace Node properties for multiple Nodes that share the same label, 
     you can make use of the External Workspace Templates from the Jenkins global config.
@@ -481,34 +481,7 @@ These condition blocks allow the execution of steps inside each condition depend
 on the completion status of the Pipeline or stage, but an error in post section doesn't make 
 the pipeline run unsuccessful.
 
-Particularly useful for archiving artifacts and storing test results.
-```groovy
-pipeline {
-  stages {
-    stage('Buzz Build') {
-      parallel {
-        stage('Build Java 7') {
-          steps {
-            sh """
-               echo I am $BUZZ_NAME
-               ./jenkins/build.sh
-               """
-          }
-          post {
-            always {
-              archiveArtifacts(artifacts: 'target/*.jar', fingerprint: true)
-            }
-
-            success {
-              stash(name: 'Buzz Java 7', includes: 'target/**')
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
+Particularly useful for archiving artifacts and storing test [results](../pipeline-exercise/archiving-with-stash-post-build.md).
 
 #### Environment Directive
 Sequence of key-value pairs that are defined as environment variables specifies for all steps or individual ones
@@ -543,7 +516,7 @@ pipeline {
   }
 }
 ```
-- The first `environment` blockt applies to whole pipeline the latter is for only that `stage Example`
+- The first `environment` block applies to whole pipeline the latter is for only that `stage Example`
 
 #### Notifications
 
@@ -663,7 +636,7 @@ instead of the whole thing.
 
 #### Credentials
 
-get trusted access to resources without having to share the actual passwords
+Get trusted access to resources without having to share the actual passwords
 are stored in an obfuscated form on the jenkins master
 
 An internal unique ID by which these credentials are identified from jobs and other 
@@ -708,7 +681,7 @@ stage('Deploy Reports') {
 ```
 
 - `my-elastic-key` uses the credential that is defined with that ID
-- withCredentials binds that to a local pipeline variable caleed `ELASTIC_ACCESS_KEY`
+- withCredentials binds that to a local pipeline variable called `ELASTIC_ACCESS_KEY`
 - The step uses the `ELASTIC_ACCESS_KEY` local pipeline variable to establish the credentials
   that it needs.
 - bindings.string 
