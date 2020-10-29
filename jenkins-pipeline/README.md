@@ -833,6 +833,9 @@ the name of a variable into its contents, and is notably absent when assigning t
 - Ant: main known usage of Ant is the build of Java applications. Ant supplies a number of built-in tasks allowing to compile, assemble, test and run Java applications
 - Domain Specific Lanugage (DSL): A programming language that has been designed with an application domain in mind. For example, a language specifically designed for modelling chemical processes, or another language designed for investment/trading at the stock exchange.
 
+### Lab: Finished Pipeline
+[Pipeline finalized](../pipeline-exercise/finished-pipeline-lab.md)
+
 
 ### Further Reading and References
 1. [Decentralied ci-cd vs centralized](https://medium.com/@oprearocks/centralized-vs-decentralized-ci-cd-strategies-for-multiple-teams-dd1ba792c1ac)
