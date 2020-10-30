@@ -908,6 +908,36 @@ Scales your jenkins pipeline usage
     ```
 - Bad Call to do `Jenkins.getInstance().getComputer('someNodeName')`
 
+#### Triggers
+
+```groovy
+pipeline {
+  agent { label 'sparkling-plain-spring-water'}
+  triggers {
+    // build every 4 hours mon-fri, use H to spread load evenly  
+    cron ('H */4 * * 1-5')
+  }
+  
+  stages {
+   stage('Example') {
+    steps {
+      echo "Hello World"
+    }
+   }
+  }
+}
+```
+Defines when the pipeline should be re-triggered to run/perform periodic tasks.
+
+The `H` will take a numeric hash of the Job name and use this to ensure that different 
+jobs with the same cron settings do not all trigger at the same time.
+
+suported triggers 
+- `cron` run/perform at a specified time, 
+- `pollSCM` check new source code changes, 
+- `upstream` run because of the result of another pipeline build 
+  (e.g. app-build job after new docker image changes on PR)
+
 
 ### Further Reading and References
 1. [Decentralied ci-cd vs centralized](https://medium.com/@oprearocks/centralized-vs-decentralized-ci-cd-strategies-for-multiple-teams-dd1ba792c1ac)
