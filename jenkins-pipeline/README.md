@@ -836,6 +836,78 @@ the name of a variable into its contents, and is notably absent when assigning t
 ### Lab: Finished Pipeline
 [Pipeline finalized](../pipeline-exercise/finished-pipeline-lab.md)
 
+### Advanced Features
+
+#### Shared Libraries
+
+Seperate repo that contains resuable functions which can be called from Pipelines
+Configured once per jenkins instance and cloned at build time
+
+Scales your jenkins pipeline usage
+- Supports Collaboration between a large number of teams working on a large number of projects
+- Calling a function rather than copying a few lines of Pipeline code leads to smaller Jenkinsfiles
+  that are easier to read
+
+#### Best Practices
+
+- Delegate more to agent and reduce the loads on master
+- Use external scripts and tools for CPU heavy processing
+- Use "command line tools" whe proccessing data, rest API communication, parsing large JSON and XML,
+  simulations and complex calculations, integration with external API's & business logic
+  - ```groovy
+       // for java client for example
+       sh "java -jar client.jar $endpointUrl $inputData"
+       
+       // avoid inputs that might contain shell metacharacters
+       writeFile file: 'input.json', text: inputData
+       sh "java -jar client.jar $endpointUrl input.json"
+    ```
+- Reduce the number of steps in pipeline, each `sh` or `bat` incurs ~200ms of overhead
+- Consolidate several sequential `sh` or `bat` steps to single, external helper script
+  - ```groovy
+       def afterParty() {
+          sh("""
+            chmod +x -R ${env.WORKSPACE}
+            bash ./status_for_loop.sh
+          """)
+        }
+        ...
+        afterParty()
+    ```
+- Groovy traits are not supported
+  - ```groovy
+        trait FlyingAbility {                           
+            String fly() { "I'm flying!" }          
+        }
+
+        class Bird implements FlyingAbility {}          
+        def b = new Bird()                              
+        assert b.fly() == "I'm flying!"
+
+        /*
+        Adds the trait FlyingAbility to the Bird class capabilities
+        instantiate a new Bird
+        the Bird class automatically gets the behavior of the FlyingAbility trait
+        */
+        
+        // another example below:
+
+        trait A {
+        def sayHello(script) {
+            script.echo "Hello"
+        }
+        }
+        class B implements A {}
+        new B().sayHello(this)
+
+        ...
+        // org.codehaus.groovy.control.MultipleCompilationErrorsException: startup failed:
+        //   General error during canonicalization: [script]
+
+        //   java.lang.UnsupportedOperationException: [script]  
+    ```
+- Bad Call to do `Jenkins.getInstance().getComputer('someNodeName')`
+
 
 ### Further Reading and References
 1. [Decentralied ci-cd vs centralized](https://medium.com/@oprearocks/centralized-vs-decentralized-ci-cd-strategies-for-multiple-teams-dd1ba792c1ac)
@@ -844,3 +916,4 @@ the name of a variable into its contents, and is notably absent when assigning t
 1. [Freestyle Jenkins Project](https://wiki.jenkins.io/display/JENKINS/Building+a+software+project)
 1. [centralising jenkins pipeline](https://medium.com/@danielantelo/standardising-and-centralising-your-jenkins-ci-pipeline-e1e097785408)
 1. [Maven build cycle](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html)
+1. [Defining Shared Libraries](https://www.jenkins.io/doc/book/pipeline/shared-libraries/)
