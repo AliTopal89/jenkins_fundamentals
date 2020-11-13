@@ -145,7 +145,7 @@ Declarative pipeline keeps the complex logic of individual steps seperate from t
 
 ### Lab - Create first pipeline
 - New Pipeline -> Git -> add ssh [url](http://localhost:5000/gitserver/butler/pipeline-lab)
-- [Final First Pipeline script](../pipeline-exercise/first-pipeline-lab.md)
+- [Final First Pipeline script](../pipeline-exercise/first-pipeline-lab.groovy)
 
 ### Pipeline to a Branch
 
@@ -212,7 +212,7 @@ Pipeline doesn't support arbitrary parallel stage depth (you cannot have paralle
 How Parallel Stages are scheduled: Multiple parallel steps execute on the same node while others are idle.
 
 ### Lab - Simple pipeline with parallel stages
- [Parallel Stages in pipeline](../pipeline-exercise/parallel-stage-lab.md)
+ [Parallel Stages in pipeline](../pipeline-exercise/parallel-stage-lab.groovy)
 
 
 ### Scripted Pipeline
@@ -245,7 +245,7 @@ Simple Scripted pipeline
   - uses `node` instead of `agent`, 
   - no `pipeline` block, 
   - must explicitly handle `checkout scm`
-  - for example: [checkout-scm exercise](../pipeline-exercise/checkout-scm-exercise.md)
+  - for example: [checkout-scm exercise](../pipeline-exercise/checkout-scm-exercise.groovy)
 
 #### pipeline-sytax
  
@@ -423,7 +423,7 @@ You can use optional parameter `includes` to store files from another directory 
 a set of [Ant-style](https://stackoverflow.com/a/8821223) include patterns.
 - Optionally use the `dir` step to create a directory where the files will be written to `unstash`.
 
-- [Stash Unstash Exercise](../pipeline-exercise/stash-exercise.md)
+- [Stash Unstash Exercise](../pipeline-exercise/stash-exercise.groovy)
 
 #### Interactive Input
 
@@ -472,7 +472,7 @@ stage('Deploy to Staging') {
 
 ### Lab: Multi Environment Pipeline
 
-[Multi ENV Pipeline Lab](../pipeline-exercise/multi-env-pipeline-lab.md)
+[Multi ENV Pipeline Lab](../pipeline-exercise/multi-env-pipeline-lab.groovy)
 
 ### Post Section
 
@@ -481,7 +481,7 @@ These condition blocks allow the execution of steps inside each condition depend
 on the completion status of the Pipeline or stage, but an error in post section doesn't make 
 the pipeline run unsuccessful.
 
-Particularly useful for archiving artifacts and storing test [results](../pipeline-exercise/archiving-with-stash-post-build.md).
+Particularly useful for archiving artifacts and storing test [results](../pipeline-exercise/archiving-with-stash-post-build.groovy).
 
 #### Environment Directive
 Sequence of key-value pairs that are defined as environment variables specifies for all steps or individual ones
@@ -834,7 +834,7 @@ the name of a variable into its contents, and is notably absent when assigning t
 - Domain Specific Lanugage (DSL): A programming language that has been designed with an application domain in mind. For example, a language specifically designed for modelling chemical processes, or another language designed for investment/trading at the stock exchange.
 
 ### Lab: Finished Pipeline
-[Pipeline finalized](../pipeline-exercise/finished-pipeline-lab.md)
+[Pipeline finalized](../pipeline-exercise/finished-pipeline-lab.groovy)
 
 ### Advanced Features
 
