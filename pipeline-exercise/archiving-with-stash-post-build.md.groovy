@@ -1,4 +1,4 @@
-```groovy
+
 pipeline {
   stages {
     stage('Buzz Build') {
@@ -24,4 +24,3 @@ pipeline {
     }
   }
 }
-```

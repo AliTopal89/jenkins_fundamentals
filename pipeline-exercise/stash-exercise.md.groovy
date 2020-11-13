@@ -1,4 +1,3 @@
-```groovy
 pipeline {
   agent none
   stages {
@@ -110,4 +109,3 @@ pipeline {
     BUZZ_NAME = 'Worker Bee'
   }
 }
-```

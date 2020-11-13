@@ -1,4 +1,3 @@
-```groovy
 pipeline {
   agent none
   parameters {
@@ -212,4 +211,3 @@ pipeline {
     }
   }
 }
-```

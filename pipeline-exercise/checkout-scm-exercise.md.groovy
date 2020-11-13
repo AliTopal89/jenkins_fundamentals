@@ -1,4 +1,3 @@
-```groovy
     node('java'){
       stage('checkout'){
         checkout([$class: 'GitSCM', 
@@ -14,4 +13,3 @@
         archiveArtifacts allowEmptyArchive: true, artifacts: 'target/*.jar', fingerprint: true, onlyIfSuccessful: true
       }
     }
-```
