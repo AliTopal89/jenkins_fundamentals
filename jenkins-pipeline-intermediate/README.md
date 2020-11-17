@@ -93,7 +93,51 @@ You can use a subset of the top-level options content in a stage’s `options - 
 
 - with the same parameters as the input step. When you use the stage input directive rather than using the step directly, any parameters you’ve specified for the input will be made available in the stage’s environment, meaning you can reference parameters from the `input in when conditions, or in environment variables.
 
+### Using Docker wth Pipeline
+
+#### Caching Data for Containers
+
+Pipeline supports adding custom arguments that are passed to Docker, allowing users to specify custom Docker Volumes to mount - used to cache data betweeen pipeline runs for example:
+
+```groovy
+pipeline {
+  agent {
+    docker {
+      image 'maven-3:alpine'
+      args '-v $HOME/.m2:root/.m2'
+    }
+  }
+}
+```
+#### Using Multiple Containers
+
+Combining Docker and Pipeline allows a Jenkinsfile to use multiple types of languages by combining
+`agent {}` directive, with different stages
+
+[Multile Containers](../pipeline-exercise/multi-container.groovy)
+
+#### Using a Dockerfile
+
+```Dockerfile
+FROM node:11-alpine
+RUN apk add -u subversion
+```
+
+```groovy
+pipeline{
+  agent { dockerfile true }
+  stages {
+    stage('Test') {
+      steps {
+        sh 'node --version'
+        sh 'svn --version'
+      }
+    }
+  }
+}
+```
 
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
+1. [Docker pipeline plugin](https://docs.cloudbees.com/docs/admin-resources/latest/plugins/docker-workflow)
