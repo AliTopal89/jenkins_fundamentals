@@ -137,7 +137,86 @@ pipeline{
 }
 ```
 
+### Prepare for Shared Libraries
+
+#### Scripted Pipeline
+
+Scripted Syntax is a domain specific language based on Apache Groovy
+
+Scripted syntax provides flexibility and extensibility to Jenkins users but the learning curve
+is steep, howver, declarative syntax offers simpler and opinionated syntax for jenkins pipelines.
+
+Both Scripted and Declarative:
+  - Have the same Pipeline subsystem underneath
+  - Can use steps built into the pipeline or provided by plugins
+  - Can utilize Shared Libraries
+
+Declartive - limits what is available to the user with mor strict pre-defined structure making it an ideal choice for simpler CI
+Scripted - the only limits on structure and syntax are from Groovy's own limitations, not Pipeline-specific. 
+
+Use `script` step to introduce Scripted syntax only when you really need to.
+
+#### Using a Jenkinsfile
+
+Jenkins pipeline uses rules similiar to Groovy for string interpolation
+
+Groovy supports declaring a string with either single quotes or double quotes
+
+```groovy
+def singleQuote = 'Hello'
+def doubleQuote = "World"
+```
+String interpolation only works for strings in double quotes, not for single-quote strings
+
+For Example:
+
+```groovy
+def username = 'Jenkins'
+echo 'Hello Mr. ${username}'
+echo "Yo Hello Mr. ${username}"
+```
+Result in:
+
+```
+Hello Mr. ${username}
+Yo Hello Mr. Jenkins
+```
+
+#### Using/Setting ENV Variables
+
+- Using env variables:
+
+  ```groovy
+  steps {
+    echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
+  }
+  ```
+- Setting Env Variables
+  - An `environment` directive defined within a `stage` applies to steps within that stage, used in 
+    top-level `pipeline` block applies to all steps.
+
+  - ```groovy
+       pipeline {
+         agent {docker { image 'node:8-alpine'} }
+         environment {
+           CC = 'clang'
+         }
+         stages {
+           stage('Example') {
+           environment {
+             DEBUG_FLAGS = '-verbose'
+             }
+             steps {
+                 sh 'blah'
+             }
+           }
+         }
+       }
+    ```
+
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
 1. [Docker pipeline plugin](https://docs.cloudbees.com/docs/admin-resources/latest/plugins/docker-workflow)
+1. [Scripted Pipeline](https://www.jenkins.io/doc/book/pipeline/syntax/#scripted-pipeline)
