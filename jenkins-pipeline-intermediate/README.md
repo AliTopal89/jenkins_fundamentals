@@ -314,8 +314,25 @@ pipeline {
 }
 ```
 
+### Multibranch Pipelines
+
+- Configured to point to a SCM
+- Without Multibranch, each pipeline maps to only one branch of the SCM
+- Supports Pull Requests as well
+- Basically its a folder and is implemented as a Jenkins job type
+- Customizable retention policy
+- Triggers - if you are not using webhooks you can use it like cron jobs
+
+##### Notes:
+
+retention: the continued possession, use, or control of something.
+retention policy: It describes how long a business needs to keep a piece of information (record), where it's stored and how to dispose of the record when its time
+
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
 1. [Docker pipeline plugin](https://docs.cloudbees.com/docs/admin-resources/latest/plugins/docker-workflow)
 1. [Scripted Pipeline](https://www.jenkins.io/doc/book/pipeline/syntax/#scripted-pipeline)
+1. [Branch and Pull Requests](https://www.jenkins.io/doc/book/pipeline/multibranch/)
+1. [Pipeline as code with multibranch](https://www.jenkins.io/blog/2015/12/03/pipeline-as-code-with-multibranch-workflows-in-jenkins/)
