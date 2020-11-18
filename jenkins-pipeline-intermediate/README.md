@@ -314,7 +314,7 @@ pipeline {
 }
 ```
 
-### Multibranch Pipelines
+#### Multibranch Pipelines
 
 - Configured to point to a SCM
 - Without Multibranch, each pipeline maps to only one branch of the SCM
@@ -323,11 +323,27 @@ pipeline {
 - Customizable retention policy
 - Triggers - if you are not using webhooks you can use it like cron jobs
 
+#### Pipeline without Blue Ocean
+
+Create a new multibranch job -> configure your scm and then create a Jenkinsfile like:
+```groovy
+pipeline {
+  agent any
+  stages {
+    stage('Example') {
+      steps {
+        sh 'echo Hello Jenkins example'
+      }
+    }
+  }
+}
+```
+and then git push
+
 ##### Notes:
 
 retention: the continued possession, use, or control of something.
 retention policy: It describes how long a business needs to keep a piece of information (record), where it's stored and how to dispose of the record when its time
-
 
 ### Further Reading and References
 
