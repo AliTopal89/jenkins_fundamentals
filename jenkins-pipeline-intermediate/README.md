@@ -340,6 +340,19 @@ pipeline {
 ```
 and then git push
 
+#### Intro to Shared Libraries
+
+- Allows you share and reuse pipeline code
+- Supports collaboration between larger number of teams working on a large number of projects
+- A seperate SCM repo that contains reusable custom steps that can be called from Pipelines
+- Configured once per jenkins instance
+  - Manage Jenkins » Configure System » Global Pipeline Libraries
+- Cloned at Build Time
+- Loaded and used as code libraries for Jenkins Pipelines
+- First step is not easy, requires deeper understanding of Pipeline
+
+- For Shared Libraries which only define Global Variables (`vars/`), or a `Jenkinsfile` which only needs a Global Variable, the annotation pattern `@Library('my-shared-library') _ `may be useful for keeping code concise. In essence, instead of annotating an unnecessary import statement, the symbol `_` is annotated.
+
 ##### Notes:
 
 retention: the continued possession, use, or control of something.
@@ -352,3 +365,4 @@ retention policy: It describes how long a business needs to keep a piece of info
 1. [Scripted Pipeline](https://www.jenkins.io/doc/book/pipeline/syntax/#scripted-pipeline)
 1. [Branch and Pull Requests](https://www.jenkins.io/doc/book/pipeline/multibranch/)
 1. [Pipeline as code with multibranch](https://www.jenkins.io/blog/2015/12/03/pipeline-as-code-with-multibranch-workflows-in-jenkins/)
+1. [Extending with Shared Libraries](https://www.jenkins.io/doc/book/pipeline/shared-libraries/)
