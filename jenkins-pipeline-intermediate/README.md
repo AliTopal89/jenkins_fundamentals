@@ -214,6 +214,105 @@ Yo Hello Mr. Jenkins
        }
     ```
 
+#### Credentials
+
+The environment directive supports a special helper method `credentials()`
+
+**Username and Password**:
+- The environment variable specified set to use `username:password` will have two additional
+  env variables that are defined automatically `MYVARNAME_USR` & `MYVARNAME_PSW`
+- ```groovy
+       pipeline {
+         agent { label 'docker-jenkins-rails' }
+         environment { SERVICE_CREDS = credentials('my-denfined-cred') }
+
+         stages {
+           stage() {
+             steps {
+               sh """
+                  echo "Service user $SERVICE_CREDS_USR"
+                  echo "Service Password $SERVICE_CREDS_PSW"
+                  curl -u $SERVICE_CREDS https://mycoolservice.example.com
+                  """
+             }
+           }
+         }
+       }
+  ```
+
+**Secret Text**:
+
+- ```groovy
+     //...
+     environment {SOME_SECRET_TEXT = credentials('jenkins-secret-id') }
+     //stages stage etc...
+         steps {
+           sh """
+               echo "Hello this is the $SOME_SECRET_TEXT"
+              """
+         }
+    // env variable specified will be set to the secret text context. 
+  ```
+
+**Secret File**:
+
+- ```groovy
+     //...
+     environment {SOME_SECRET_FILE = credentials('jenkins-secret-id') }
+     //stages stage etc...
+         steps {
+           sh """
+               echo "Hello this is the $SOME_SECRET_FILE"
+              """
+         }
+    // the env variable specified will be set to the location of the file that is temporarily created
+  ```
+
+**SSH with Private Key**:
+
+- ```groovy
+     //...
+     environment { SSH_CREDS = credentials('jenkins-ssh-creds') }
+     //stages stage etc...
+         steps {
+           sh """
+               echo " Ssh Private key is located at $SSH_CREDS "
+               echo "Ssh user $SSH_CREDS_USR"
+               echo "Ssh passphrase $SSH_CREDS_PSW"
+              """
+         }
+    // env variable will be set to location of the ssh key file, created with two additonal
+    // env variables with is SSH_CREDS_USR & SSH_CREDS_PSW(holding the private key passphrase)
+  ```
+
+#### Parameters
+
+```groovy
+//pipeline agent ...
+parameters {
+  sttring (name: 'Greetings', defaultValue: 'Hey whats up', description: 'How should I greet?')
+}
+// stages stage
+    steps {
+      echo "${params.Greeting} Jenkins"
+    }
+```
+
+#### Handling Failure
+
+```groovy
+pipeline {
+  // agent stages stage steps...
+  post {
+    always {
+        junit '**/target/*.xml'
+    }
+    failure {
+      mail to: mail.example.com, subject: 'Hey this build failed :('
+    }
+  }
+}
+```
 
 ### Further Reading and References
 
