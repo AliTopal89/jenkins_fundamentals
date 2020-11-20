@@ -358,6 +358,55 @@ and then git push
 retention: the continued possession, use, or control of something.
 retention policy: It describes how long a business needs to keep a piece of information (record), where it's stored and how to dispose of the record when its time
 
+### Create Shared Libraries
+
+- Configure a Global Pipeline Library in Jenkins
+- Create a Seperate SCM repo
+
+**SCM Directory Structure**:
+
+```
+(root)
++- src                     # Groovy source files
+|   +- org
+|       +- foo
+|           +- Bar.groovy  # for org.foo.Bar class
++- vars
+|   +- foo.groovy          # for global 'foo' variable
+|   +- foo.txt             # help for 'foo' variable
++- resources               # resource files (external libraries only)
+|   +- org
+|       +- foo
+|           +- bar.json    # static helper data for org.foo.Bar
+```
+
+- `src` directory uses standard Java based structure
+- This directory is added to the `classpath` when executing pipelines
+
+- `vars` directory contains scripts that define "custom steps" accessible from Pipelines
+- can't use subdirectories for vars directory
+- the matching `.txt` (or `.md`) etc can contain documentation
+
+- *libraryResources* reads files from `resources` directory
+- Exernal libraries may load adjunct files from a `resources/` directory using the
+  `libraryResource`  step. The argument is a relative pathname, akin to Java resource loading:
+
+  ```groovy
+  def request = libraryResource 'com/mycorp/pipeline/somelib/request.json'
+  ```
+
+**How to Configure Shared Librarires**:
+
+-  Global Libraries configured in Jenkins are considered *trusted*
+  - Stepls from this library runs *outside* of Groovy Sandbox
+- Libraries configured at multibranch/folder level are considered *not trusted*
+  - Steps from this librart run *inside* the Groovy Sandbox
+  - Prefer libraries at multibranch/folder level to reduce risk to Jenkins server
+    from libraries outside the sandbox
+- When *Load Implicty* is enabled, the default branch is automatically available to all
+  Pipelines custom steps which can be also loaded manualy using `@Library` annotation.
+
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
