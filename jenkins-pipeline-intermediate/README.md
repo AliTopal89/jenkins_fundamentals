@@ -406,6 +406,13 @@ retention policy: It describes how long a business needs to keep a piece of info
 - When *Load Implicty* is enabled, the default branch is automatically available to all
   Pipelines custom steps which can be also loaded manualy using `@Library` annotation.
 
+### Lab: Global Pipeline shared library
+
+- Manage Jenkins -> Configure System -> Add Global Pipeline Libraries
+- Retrieval Method:`Modern SCM` -> Git -> `http://localhost:5000/gitserver/butler/shared-library`
+
+[Jenkinsfile for shared library](../pipeline-exercise/global-pipeline-lab.groovy)
+
 
 ### Further Reading and References
 
