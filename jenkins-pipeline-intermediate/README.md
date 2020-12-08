@@ -438,6 +438,12 @@ retention policy: It describes how long a business needs to keep a piece of info
     }
   ```
 
+### Call the Shared Library Custom Step
+
+- Simple Hello World example:
+
+[Jenkinsfile and groovy call method](../pipeline-exercise/shared-library-simple-hello.groovy)
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
