@@ -413,6 +413,30 @@ retention policy: It describes how long a business needs to keep a piece of info
 
 [Jenkinsfile for shared library](../pipeline-exercise/global-pipeline-lab.groovy)
 
+### Shared Library Custom Steps
+
+- Create a file that has the desired name of the custom step
+- Add `call()` method inside the file
+- ```groovy
+    def call(String name, String dayOfWeek) {
+      sh "echo Hello World ${name}. It is ${dayOfWeek}"
+    }
+  ```
+- another example:
+  ```groovy
+    // inside shared library /vars/postBuildSuccess.groovy
+    def call(Map config = [:]){
+      stash(name: "${config.stashName}", includes: 'target/**')
+      archiveArtifacts(artifacts: 'target/*.jar')
+    }
+    
+
+    // inside Jenkinsfile
+    //...
+    steps {
+      postBuildSuccess(stashName: "Java 7")
+    }
+  ```
 
 ### Further Reading and References
 
