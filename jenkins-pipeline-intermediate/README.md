@@ -444,6 +444,16 @@ retention policy: It describes how long a business needs to keep a piece of info
 
 [Jenkinsfile and groovy call method](../pipeline-exercise/shared-library-simple-hello.groovy)
 
+#### Custom step to send slack notifications
+
+[Custom Slack simple notifications](../pipeline-exercise/custom-simple-slack-notifications.groovy)
+
+However this can be made more concise and less repetitive looking add new call methods and use those on the post conditions
+
+### Lab: Use a Custom Step
+
+[Custom Step Lab Exercise](../pipeline-exercise/custom-step-lab.groovy)
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
