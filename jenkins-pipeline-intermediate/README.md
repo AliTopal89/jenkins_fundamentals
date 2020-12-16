@@ -454,6 +454,13 @@ However this can be made more concise and less repetitive looking add new call m
 
 [Custom Step Lab Exercise](../pipeline-exercise/custom-step-lab.groovy)
 
+### Library Resource
+
+- For Example:
+  - instead of doing an inline body for an email, load the body of the message from a file
+
+[Email extension configuration exercise](../pipeline-exercise/email-template-render.groovy)
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
@@ -462,3 +469,4 @@ However this can be made more concise and less repetitive looking add new call m
 1. [Branch and Pull Requests](https://www.jenkins.io/doc/book/pipeline/multibranch/)
 1. [Pipeline as code with multibranch](https://www.jenkins.io/blog/2015/12/03/pipeline-as-code-with-multibranch-workflows-in-jenkins/)
 1. [Extending with Shared Libraries](https://www.jenkins.io/doc/book/pipeline/shared-libraries/)
+1. [Java Class GStringEngine](http://docs.groovy-lang.org/docs/groovy-2.4.9/html/gapi/groovy/text/GStringTemplateEngine.html)
