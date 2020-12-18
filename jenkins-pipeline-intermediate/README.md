@@ -461,6 +461,9 @@ However this can be made more concise and less repetitive looking add new call m
 
 [Email extension configuration exercise](../pipeline-exercise/email-template-render.groovy)
 
+### Lab: Create and Use a Resource File
+[Library Resource File with shell script](../pipeline-exercise/create-use-resource-file.groovy)
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
