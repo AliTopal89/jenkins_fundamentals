@@ -464,6 +464,32 @@ However this can be made more concise and less repetitive looking add new call m
 ### Lab: Create and Use a Resource File
 [Library Resource File with shell script](../pipeline-exercise/create-use-resource-file.groovy)
 
+### More Shared Library Examples
+
+```groovy
+//Jenkinsfile
+
+helloWorldPipeline(name: "Yamcha", dayOfWeek: "Monday")
+
+
+// vars/helloWorldPipeline.groovy
+def call(Map pipelineParams) {
+  pipeline {
+    agent any
+    stages {
+      stage('hello') {
+        steps {
+          helloWorld(name: "${pipelineParams.name}", dayOfWeek: "${pipelineParams.dayOfWeek}")
+        }
+      }
+    }
+  }
+}
+```
+
+Pipeline gives you the ability to add your own DSL elements
+Pipeline itself is a DSL
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
