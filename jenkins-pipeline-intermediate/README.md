@@ -487,8 +487,38 @@ def call(Map pipelineParams) {
 }
 ```
 
-Pipeline gives you the ability to add your own DSL elements
-Pipeline itself is a DSL
+- Pipeline gives you the ability to add your own DSL elements
+- Pipeline itself is a DSL
+  - You would rather want your own dsl when you want to reduce the boilerplateby encapsulating common items to your DSL.
+  - You want to provide a DSL that provides a prescriptive way that your builds work - uniform across your organisations Jenkinsfiles.
+
+```groovy
+//Jenkinsfile
+@Library('shared-library@shared-starter') _
+helloWorldPipeline {
+    name = "Yamcha"
+    dayOfWeek = "Monday"
+}
+
+//vars/helloWorldPipeline.groovy
+
+def call(body) {
+    def pipelineParams= [:]
+    body.resolveStrategy = Closure.DELEGATE_FIRST
+    body.delegate = pipelineParams
+    body()
+    pipeline {
+        agent any
+        stages {
+            stage('hello') {
+                steps {
+                    helloWorld(name: "${pipelineParams.name}", dayOfWeek: "${pipelineParams.dayOfWeek}")
+                }
+            }
+        }
+    }
+}
+```
 
 ### Further Reading and References
 
