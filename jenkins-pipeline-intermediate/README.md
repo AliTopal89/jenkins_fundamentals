@@ -520,6 +520,27 @@ def call(body) {
 }
 ```
 
+```groovy
+def call(body) {    
+    def config = [:]
+    body.resolveStrategy = Closure.DELEGATE_FIRST
+    body.delegate = config
+    body()
+}
+
+
+// helloWorld { myarg = 'sdfsdf' }
+```
+
+
+When this runs, it is creating an empty map (`config`). Then it is telling the closure (`body`) to look at the delegate first to find properties by setting its resolveStrategy to be the constant `Closure.DELEGATE_FIRST`. Then it assigns the config map as the delegate for the body object.
+
+Now when you execute the `body()` closure, the variables are scoped to the *"config map"*, so now config.myarg = 'sdfsdf'.
+
+Now later in the code you can have easy access to the map of values in config.
+
+`body` is the *owner*, and by default is the *delegate*. But when you switch the *delegate* to be `config`, and tell it to use the delegate first, you get the variables `config's` scope.
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
