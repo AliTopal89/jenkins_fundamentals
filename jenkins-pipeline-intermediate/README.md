@@ -541,6 +541,11 @@ Now later in the code you can have easy access to the map of values in config.
 
 `body` is the *owner*, and by default is the *delegate*. But when you switch the *delegate* to be `config`, and tell it to use the delegate first, you get the variables `config's` scope.
 
+### Lab: Create a Corporate Pipeline
+
+[Create a Corporate Pipeline](../pipeline-exercise/corporate-pipeline-lab.groovy)
+
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
@@ -550,3 +555,4 @@ Now later in the code you can have easy access to the map of values in config.
 1. [Pipeline as code with multibranch](https://www.jenkins.io/blog/2015/12/03/pipeline-as-code-with-multibranch-workflows-in-jenkins/)
 1. [Extending with Shared Libraries](https://www.jenkins.io/doc/book/pipeline/shared-libraries/)
 1. [Java Class GStringEngine](http://docs.groovy-lang.org/docs/groovy-2.4.9/html/gapi/groovy/text/GStringTemplateEngine.html)
+1. [Making your own DSL plugin with Pipelines](https://www.jenkins.io/blog/2016/04/21/dsl-plugins/)
