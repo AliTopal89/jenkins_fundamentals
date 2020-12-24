@@ -554,9 +554,27 @@ By default, Pipeline writes transient data to disk `FREQUENTLY`
 Speed/Durability settings allow you to improve performance by reducing the frequency at which data is written to disk
 - This incurs the risk that some data may be lost if the system crashes or Jenkins is restarted
 
+#### When Higher Performance Durability Settings Help
+- Pipelines that just build and test the code frequently write, build and test data that can be easily run
+- Your Jenkins instance show high `iowait`
+  - `iowait` - *time waiting for I/O completion.* - the presence of I/O wait tells us that the system is idle at a time when it could be processing outstanding requests
+- Jenkins instance uses a network file system or magnetic storage
+- You run many pipelines at the same time
+- You have pipelines with many many (more than hundred) steps
+- Doesn't help when your pipelines mostly wait for bash sripts to finish
+- Not recommended to use high performance when deploying to PROD
+
+#### Durability Settings
+
+- `MAX_SURVIVABILTY` - Use this for running your most critical Pipelines.
+- `SURVIVABLE_NOMATOMIC` - - Writes data with every step but avoids atomic writes. This is faster than maximum durability mode, especially on networked filesystems
+- `PERFORMANCE_OPTIMIZED` -  Pipelines do not finish AND Jenkins is not shut down gracefully, they may lose data and behave like Freestyle projects 
+
+
 ##### Note
 
 - lose - be deprived of or cease to have or retain (something).
+- idle - when it is not being used by any program
 
 ### Further Reading and References
 
