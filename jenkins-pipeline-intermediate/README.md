@@ -546,6 +546,18 @@ Now later in the code you can have easy access to the map of values in config.
 [Create a Corporate Pipeline](../pipeline-exercise/corporate-pipeline-lab.groovy)
 
 
+### Durability
+
+By default, Pipeline writes transient data to disk `FREQUENTLY`
+- Running pipelines lose very little data from a system crash or an unexpected Jenkins restart
+- This frequent disk I/O can severely degrade Pipeline performance
+Speed/Durability settings allow you to improve performance by reducing the frequency at which data is written to disk
+- This incurs the risk that some data may be lost if the system crashes or Jenkins is restarted
+
+##### Note
+
+- lose - be deprived of or cease to have or retain (something).
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
