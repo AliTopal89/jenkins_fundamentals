@@ -567,14 +567,38 @@ Speed/Durability settings allow you to improve performance by reducing the frequ
 #### Durability Settings
 
 - `MAX_SURVIVABILTY` - Use this for running your most critical Pipelines.
-- `SURVIVABLE_NOMATOMIC` - - Writes data with every step but avoids atomic writes. This is faster than maximum durability mode, especially on networked filesystems
-- `PERFORMANCE_OPTIMIZED` -  Pipelines do not finish AND Jenkins is not shut down gracefully, they may lose data and behave like Freestyle projects 
+- `SURVIVABLE_NONATOMIC` - Writes data with every step but avoids atomic writes. This is faster than maximum durability mode, especially on networked filesystems
+- `PERFORMANCE_OPTIMIZED` -  Pipelines do not finish AND Jenkins is not shut down gracefully, they may lose data and behave like Freestyle projects
 
+#### How to Set on Jenkinsfile
+
+```groovy
+pipeline {
+  agent { label 'buyakasha' }
+  //...
+  options {
+    durabilityHint('PERFORMANCE_OPTIMIZED')
+  }
+}
+```
+#### Best Practices for Durability Settings
+
+- Use `PERFORMANCE_OPTIMIZED` mode for most build/test pipelines
+  - Set `MAX_SURVIVABILTY` for Pipelines that modify critical infra
+  - `PERFORMANCE_OPTIMIZED` can be set globally, and then use the `options {}` step to choose more
+    durable settings
+- Use `MAX_SURVIVABILTY` or `SURVIVABLE_NONATOMIC` for auditing, which can record every step that is run. 
+  - One of these modes can be set globally and then `options{}` step to choose `PERFORMANCE_OPTIMIZED` mode for most build/test pipelines
 
 ##### Note
 
+- transient - A transient event is a short-lived burst of energy in a system caused by a sudden change of state
 - lose - be deprived of or cease to have or retain (something).
 - idle - when it is not being used by any program
+
+### Lab: Durability
+
+[Set Durability](../pipeline-exercise/)
 
 ### Further Reading and References
 
@@ -586,3 +610,5 @@ Speed/Durability settings allow you to improve performance by reducing the frequ
 1. [Extending with Shared Libraries](https://www.jenkins.io/doc/book/pipeline/shared-libraries/)
 1. [Java Class GStringEngine](http://docs.groovy-lang.org/docs/groovy-2.4.9/html/gapi/groovy/text/GStringTemplateEngine.html)
 1. [Making your own DSL plugin with Pipelines](https://www.jenkins.io/blog/2016/04/21/dsl-plugins/)
+1. [Scaling Pipeline](https://www.jenkins.io/doc/book/pipeline/scaling-pipeline/
+1. [Garbage Collection Tuning](https://www.jenkins.io/blog/2016/11/21/gc-tuning/)
