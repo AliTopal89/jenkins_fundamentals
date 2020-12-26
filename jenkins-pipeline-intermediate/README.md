@@ -598,7 +598,7 @@ pipeline {
 
 ### Lab: Durability
 
-[Set Durability](../pipeline-exercise/)
+[Set Durability](../pipeline-exercise/durability-lab.groovy)
 
 ### Further Reading and References
 
