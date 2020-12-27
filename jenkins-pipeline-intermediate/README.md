@@ -600,6 +600,41 @@ pipeline {
 
 [Set Durability](../pipeline-exercise/durability-lab.groovy)
 
+### Sequential Stages
+
+Way to specify stages nested within other stages. 
+Run multiple stages in each parallel branch which gives more visibilty into the progress of your Pipeline.
+Uses of Sequential Stages:
+  - Use sequential stages to ensure that stages using the same agent (`agent { label 'blah'}`) uses
+    the same workspace even if you are using multiple agents in your Pipeline.
+  - Use sequential stages to define a timeout in the parent's **options** directive
+    - Use a parent **stage** with nested stages and define a timeout in the parent's **options** directive
+    - the timeout will apply to parents and all of its nested stages
+  - ```groovy
+       pipeline [
+         agent { label 'foobar' }
+         stages {
+           stage('build and test the project') {
+             options { timeout (time: 1 unit: 'HOURS') }
+             agent { docker "cool-build-tools-image" }
+             stages {
+               stage ('build me') {
+                 steps {
+                   sh "./build.sh"
+                 }
+               } // build me
+               
+               stage ('test') {
+                 steps {
+                   sh "./test.sh"
+                 }
+               } // test
+             } // stages (nested) 
+           } // stage ('build and test the project')
+         } // stages
+       ]
+    ```
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
