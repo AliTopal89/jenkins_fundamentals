@@ -663,6 +663,10 @@ Uses of Sequential Stages:
      }
   ```
 
+### Lab: Restart Stages
+
+[Restart Stages Preserve Stashes](../pipeline-exercise/restart-stage-lab.groovy)
+
 
 ### Further Reading and References
 
