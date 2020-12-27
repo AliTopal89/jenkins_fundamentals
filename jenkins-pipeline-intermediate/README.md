@@ -667,6 +667,45 @@ Uses of Sequential Stages:
 
 [Restart Stages Preserve Stashes](../pipeline-exercise/restart-stage-lab.groovy)
 
+### Groovy Sandbox
+
+- When it runs, each method call, object construction and field access is checked against
+  a whitelist of approved operations
+- Unapproved operations attempted scripts are killed
+
+#### Why Does Pipeline Need a Sandbox
+
+- Sandbox provides a safe location to test Scripted Pipeline that has not been thoroughly tested and reviewed
+- Unsafe code (disclosing secrets & propreitary information, modification/deletion of data from jenkins )can be inserted in a Pipeline intentionally.
+
+#### Whitelist
+
+- Defines each method call, object construction and field access that can be used
+  - [default whitelists](https://github.com/jenkinsci/script-security-plugin/blob/master/src/main/resources/org/jenkinsci/plugins/scriptsecurity/sandbox/whitelists/generic-whitelist) from Script Securtiy Plugin
+  - other plugins and admininstrators may add to that list
+- When a script fails because its not in the whitelist, that operation is added to the 
+  *approval queue*
+- Most "getter" methods are harmless but some may allow access to resources that should be secured
+  - Unsafe getter method example:
+    - `hudson.model.ItemGroup.getItems` lists jobs by name within a folder by checking Jobs/Read
+      - should not be uncoditional whitelisted, because enables the user to read some info from any job in that folder, even those that are protected by ACL (`java.lang.Object hudson.security ACL` - Gate-keeper that controls access to Hudson's model objects.)
+  - Safe Handling of Getter Method:
+    - Administrator can instead click on ***Approve assuming permission check***
+      - permitted when run as an actual user who is on the ACL
+      - the call is forbidden when ran as the system user
+      - this button is only shown for constructors and method calls
+
+#### More on Script Security
+
+- Do not use Permissive Script Security
+- Script Security and Sandbox are mostly important from scripted pipelines
+  - Declarative Pipeline can include code that is subject to script security, although it is less common and harder to do.
+- Global Shared Libraries with a locked-down repo can be used to execute unsafe pipeline code
+  without doing mass whitelisting
+
+##### Notes
+- ACL - which decides whether the Authentication object carried by the current thread has the given permission or not.
+
 
 ### Further Reading and References
 
@@ -680,3 +719,6 @@ Uses of Sequential Stages:
 1. [Making your own DSL plugin with Pipelines](https://www.jenkins.io/blog/2016/04/21/dsl-plugins/)
 1. [Scaling Pipeline](https://www.jenkins.io/doc/book/pipeline/scaling-pipeline/
 1. [Garbage Collection Tuning](https://www.jenkins.io/blog/2016/11/21/gc-tuning/)
+1. [Jenkins Security](https://www.jenkins.io/doc/developer/security/)
+1. [Do not disable groovy sandbox](https://brokenco.de/2017/08/03/donut-disable-groovy-sandbox.html)
+1. [Configuring Content Secutity Policy](https://www.jenkins.io/doc/book/system-administration/security/configuring-content-security-policy/)
