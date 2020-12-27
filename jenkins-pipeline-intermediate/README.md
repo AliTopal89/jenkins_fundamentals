@@ -635,6 +635,10 @@ Uses of Sequential Stages:
        ]
     ```
 
+### Lab: Sequential Stages
+
+[Sequential Stages for the whole pipeline](../pipeline-exercise/sequential-stages-lab.groovy)
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
