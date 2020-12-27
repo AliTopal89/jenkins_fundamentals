@@ -639,6 +639,31 @@ Uses of Sequential Stages:
 
 [Sequential Stages for the whole pipeline](../pipeline-exercise/sequential-stages-lab.groovy)
 
+### Restart from a Stage
+
+- Allows you to rerun a pipeline from any top-level stage that failed due to transient or environmental stages. 
+- Stages that were skipped due to an earlier failure are not available to be restarted, but stages that were skipped due to `when` conditional are available. 
+- Group of nested stages, or parallel stages cannot be started as well only top-level stages can
+
+##### Preserving Stashes for use with Restarted Stages
+
+- With declarative stage restarting, you may want to `unstash` artifacts from a stage that 
+  ran before the stage from which you are restarting.
+- To enable `stash` preservation, use `preserveStashes` property
+  - This allows you to configure a maximum number of completed runs whose stash artifacts should be
+    preserved for reuse in restarted runs
+  - Checks to see if there are any previously completed runs that should have their stash
+    artifacts cleared.
+- ```groovy
+     options {
+       preserveStashes()
+
+       // to preserve the stashes from the five most recent completed builds.
+       preserveStashes(buildCount: 5)
+     }
+  ```
+
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
