@@ -707,6 +707,20 @@ Uses of Sequential Stages:
 - ACL - which decides whether the Authentication object carried by the current thread has the given permission or not.
 
 
+### HINTS
+
+- Limit the amount of complex logic in the Pipeline
+- Try avoiding using `XmlSlurper` & `JsonSlurper` which carry a high memory and CPU cost.
+- `xmlint` & `XMLStarter` cli tools offering XML extraction using `Xpath`
+- `jq` offers same functionanilty or `JSON`
+- Use external scripts for CPU extensive processing
+- Use cli when processing data, interactive communication with REST API's, parsing larger XML/JSON files, nontrivial integrations with extenal API's etc.
+- Avoid inputs that may contain shell metacharacters.
+- Most well performed Pipelines contain 300 lines or less
+  - Each call to `sh` or `bat` incurs about 200ms of overhead
+- Consolidate several `sh` and/or `bat` step into a single external helper
+
+
 ### Further Reading and References
 
 1. [What is new in declarative](https://www.jenkins.io/blog/2018/04/09/whats-in-declarative/)
@@ -722,3 +736,4 @@ Uses of Sequential Stages:
 1. [Jenkins Security](https://www.jenkins.io/doc/developer/security/)
 1. [Do not disable groovy sandbox](https://brokenco.de/2017/08/03/donut-disable-groovy-sandbox.html)
 1. [Configuring Content Secutity Policy](https://www.jenkins.io/doc/book/system-administration/security/configuring-content-security-policy/)
+1. [Soap vs. Rest](https://www.upwork.com/resources/soap-vs-rest-a-look-at-two-different-api-styles)
