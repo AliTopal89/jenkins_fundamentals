@@ -3,7 +3,7 @@
 ### Recent Declarative Pipeline Features
 
 **Declarative Directive Generator**:
-- Allows ypu to generate Pipeline code for Declarative Pipeline directive such as `agent`, `option`, `parameters`, `when` etc. For example:
+- Allows you to generate Pipeline code for Declarative Pipeline directive such as `agent`, `option`, `parameters`, `when` etc. For example:
   - ```groovy
         parameters {
           choice choices: ['', 'blah', 'moreBlah', 'evenMoreBlah'], description: 'types of blah', name: 'blah'
@@ -60,7 +60,7 @@
 **Stage Options**:
 
 Sometimes, you may only want to disable automatic checkout of your repository, using the `skipDefaultCheckout(true)` option, for one specific stage in your Pipeline. Or perhaps you want to have a `timeout` that covers an entire `stage`, including time spent waiting for a valid `agent`, `post` condition execution, or the new input directive for stages.
-You can use a subset of the top-level options content in a stage’s `options - wrapper steps, and Declarative-specific options that are marked as legal in a stage.
+You can use a subset of the top-level options content in a stage’s `options` - wrapper steps, and Declarative-specific options that are marked as legal in a stage.
 
 **Input Directive to Stage**:
 
@@ -88,10 +88,11 @@ You can use a subset of the top-level options content in a stage’s `options - 
         }
     }
   ```
+- The `input` directive on a `stage` allows you to prompt for input, using the "input step". The `stage` will pause after any `options` have been applied, and before entering the `agent` block for that `stage` or evaluating the `when` condition of the `stage`. If the `input` is approved, the `stage` will then continue.
 
 - the input directive is evaluated before you enter any agent specified on this stage, so if you are using a top-level agent none and each stage has its own agent specified, you can avoid consuming an executor while waiting for the input to be submitted.
 
-- with the same parameters as the input step. When you use the stage input directive rather than using the step directly, any parameters you’ve specified for the input will be made available in the stage’s environment, meaning you can reference parameters from the `input in when conditions, or in environment variables.
+- with the same parameters as the input step. When you use the stage input directive rather than using the step directly, any parameters you’ve specified for the input will be made available in the stage’s `environment`, meaning you can reference parameters from the `input` in `when` conditions, or in `environment` variables.
 
 ### Using Docker wth Pipeline
 
@@ -114,7 +115,7 @@ pipeline {
 Combining Docker and Pipeline allows a Jenkinsfile to use multiple types of languages by combining
 `agent {}` directive, with different stages
 
-[Multile Containers](../pipeline-exercise/multi-container.groovy)
+[Multiple Containers](../pipeline-exercise/multi-container.groovy)
 
 #### Using a Dockerfile
 
@@ -144,14 +145,14 @@ pipeline{
 Scripted Syntax is a domain specific language based on Apache Groovy
 
 Scripted syntax provides flexibility and extensibility to Jenkins users but the learning curve
-is steep, howver, declarative syntax offers simpler and opinionated syntax for jenkins pipelines.
+is steep, however, declarative syntax offers simpler and opinionated syntax for jenkins pipelines.
 
 Both Scripted and Declarative:
   - Have the same Pipeline subsystem underneath
   - Can use steps built into the pipeline or provided by plugins
   - Can utilize Shared Libraries
 
-Declartive - limits what is available to the user with mor strict pre-defined structure making it an ideal choice for simpler CI
+Declarative - limits what is available to the user with more strict pre-defined structure making it an ideal choice for simpler CI
 Scripted - the only limits on structure and syntax are from Groovy's own limitations, not Pipeline-specific. 
 
 Use `script` step to introduce Scripted syntax only when you really need to.
@@ -351,7 +352,7 @@ and then git push
 - Loaded and used as code libraries for Jenkins Pipelines
 - First step is not easy, requires deeper understanding of Pipeline
 
-- For Shared Libraries which only define Global Variables (`vars/`), or a `Jenkinsfile` which only needs a Global Variable, the annotation pattern `@Library('my-shared-library') _ `may be useful for keeping code concise. In essence, instead of annotating an unnecessary import statement, the symbol `_` is annotated.
+- For Shared Libraries which only define Global Variables (`vars/`), or a `Jenkinsfile` which only needs a Global Variable, the annotation pattern `@Library('my-shared-library') _ ` may be useful for keeping code concise. In essence, instead of annotating an unnecessary import statement, the symbol `_` is annotated.
 
 ##### Notes:
 
@@ -398,9 +399,9 @@ retention policy: It describes how long a business needs to keep a piece of info
 **How to Configure Shared Librarires**:
 
 -  Global Libraries configured in Jenkins are considered *trusted*
-  - Stepls from this library runs *outside* of Groovy Sandbox
+  - Steps from this library runs *outside* of Groovy Sandbox
 - Libraries configured at multibranch/folder level are considered *not trusted*
-  - Steps from this librart run *inside* the Groovy Sandbox
+  - Steps from this library run *inside* the Groovy Sandbox
   - Prefer libraries at multibranch/folder level to reduce risk to Jenkins server
     from libraries outside the sandbox
 - When *Load Implicty* is enabled, the default branch is automatically available to all
@@ -533,7 +534,7 @@ def call(body) {
 ```
 
 
-When this runs, it is creating an empty map (`config`). Then it is telling the closure (`body`) to look at the delegate first to find properties by setting its resolveStrategy to be the constant `Closure.DELEGATE_FIRST`. Then it assigns the config map as the delegate for the body object.
+When this runs, it is creating an empty map (`config`). Then it is telling the closure (`body`) to look at the delegate first to find properties by setting its `resolveStrategy` to be the constant `Closure.DELEGATE_FIRST`. Then it assigns the config map as the delegate for the body object.
 
 Now when you execute the `body()` closure, the variables are scoped to the *"config map"*, so now config.myarg = 'sdfsdf'.
 
@@ -584,7 +585,7 @@ pipeline {
 #### Best Practices for Durability Settings
 
 - Use `PERFORMANCE_OPTIMIZED` mode for most build/test pipelines
-  - Set `MAX_SURVIVABILTY` for Pipelines that modify critical infra
+  - Set `MAX_SURVIVABILTY` for Pipelines that modify critical infrastructure
   - `PERFORMANCE_OPTIMIZED` can be set globally, and then use the `options {}` step to choose more
     durable settings
 - Use `MAX_SURVIVABILTY` or `SURVIVABLE_NONATOMIC` for auditing, which can record every step that is run. 
@@ -676,7 +677,7 @@ Uses of Sequential Stages:
 #### Why Does Pipeline Need a Sandbox
 
 - Sandbox provides a safe location to test Scripted Pipeline that has not been thoroughly tested and reviewed
-- Unsafe code (disclosing secrets & propreitary information, modification/deletion of data from jenkins )can be inserted in a Pipeline intentionally.
+- Unsafe code (disclosing secrets & propreitary information, modification/deletion of data from jenkins) can be inserted in a Pipeline intentionally.
 
 #### Whitelist
 
@@ -688,7 +689,7 @@ Uses of Sequential Stages:
 - Most "getter" methods are harmless but some may allow access to resources that should be secured
   - Unsafe getter method example:
     - `hudson.model.ItemGroup.getItems` lists jobs by name within a folder by checking Jobs/Read
-      - should not be uncoditional whitelisted, because enables the user to read some info from any job in that folder, even those that are protected by ACL (`java.lang.Object hudson.security ACL` - Gate-keeper that controls access to Hudson's model objects.)
+      - should not be uncoditionaly whitelisted, because enables the user to read some info from any job in that folder, even those that are protected by ACL (`java.lang.Object hudson.security ACL` - Gate-keeper that controls access to Hudson's model objects.)
   - Safe Handling of Getter Method:
     - Administrator can instead click on ***Approve assuming permission check***
       - permitted when run as an actual user who is on the ACL

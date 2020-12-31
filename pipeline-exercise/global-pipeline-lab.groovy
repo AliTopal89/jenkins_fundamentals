@@ -1,10 +1,10 @@
 //gitserver/butler/shared-library/src/branch/master/vars/helloWorld.groovy
 
-/*  
+ 
 def call(Map config) {
     sh "echo Hello world, ${config.name}"
 }
-*/
+
 
 //Jenkinsfile:
 
