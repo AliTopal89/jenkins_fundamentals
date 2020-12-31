@@ -1,4 +1,4 @@
-### Jenkins fundementals
+### Jenkins fundamentals
 
 Jenkins is an open source automation server
 
@@ -175,7 +175,7 @@ For Example:
 
 ### Install Maven lab notes learned the hard way
 
-- install the jenkins.war file from previos lectures which looks like an example but it does need it seems like
+- install the jenkins.war file from previous lectures which looks like an example but it does need it seems like
 - Manage Jenkins -> Global Configuration and set JDK Installation with 
   - `NAME` `ORACLE JDK8`
   - `NAME` `ORACLE JDK7`
@@ -210,7 +210,7 @@ bloated with functionality you don't need.
 - Installed Tab:
   - Enabled - Check mark indicates that the plugin is enabled
     - Greyed out check marks indicate plugins that are required by other plugins 
-    *(Always thought they were plugins installed/updated by Jenkins by default)*
+    *(Always thought they were plugins installed/updated by Jenkins/Cloudbees by default)*
 - Uninstall a plugin:
   - Removes the plugin binary(hpi or jpi extension) from the disk
   - Does not remove the configuration that the plugin may have created 
@@ -265,7 +265,7 @@ Ways to install PLugins:
   docker images (aka single-shot Jenkins masters).
 
 ### Configure Notifications
-- Notifications for CI/CD can be delivered with email, Slack and the most unfortunate TEAMS
+- Notifications for CI/CD can be delivered with email, Slack, and the most unfortunate TEAMS
 - Built in Email Notifications
   - Main configuration is about SMTP(sending) server
   - Every failed build
@@ -280,7 +280,7 @@ Ways to install PLugins:
 ### Distributed Build Architecture
 
 Distrubuted builds run on nodes instead of master node. 
-  - The Jenkins master is webserver that also actis as a brain for deciding how/when/where to run tasks
+  - The Jenkins master is webserver that also acts as a brain for deciding how/when/where to run tasks
   - A `node` is a server whre Jenkins runs jobs for `executors`.
   - The `agent` is the tool that manages executors on remote node.
   - Jenkins Master
@@ -300,7 +300,7 @@ Distrubuted builds run on nodes instead of master node.
 #### Master agent connectors
 
 - Agent to master control enabled by default
-- An agent can be launced by ssh from master, agent managed as windwos service, 
+- An agent can be launced by ssh from master, agent managed as windows service, 
   JNLP(Java web start), or a custom script from master
 - Communication between Jenkins and Unix agents can use SSH
 - SSHD only need to be installed on agents
@@ -429,11 +429,11 @@ Pipelines may need access to external resources such as Brakeman, Nexus, Elastic
 
 ##### Authentication
 
-- Security Realm tell jenkins which referential to use for authentication, which is a dedicated
+- Security Realm tell Jenkins which referential to use for authentication, which is a dedicated
 database for user and passwords
   - Defines the security implementation used to establish the identity of users
   - Only one security realm can be active at a time
-  - By default, users and groups come from jenkins internal db.
+  - By default, users and groups come from jenkins internal db
 - 4 kinds of Realm
   - Jenkins User Database
   - Unix user/group Database
@@ -449,7 +449,7 @@ Configure Global Security -> Realm: Jenkins own user database ->
   - Moodify User with Flywheel to give description of user, 
     ssh public keys, timezone, modify username & password 
 
-##### AUthorization
+##### Authorization
 
 - Grants access rights to:
   - `Resource`: Task, Object/Action to manipulate
@@ -538,8 +538,7 @@ Monitor Server Load
       - **Number of available executors**
         This line tracks the number of executors (among the online executors counted above) 
         that are available to carry out builds. The ratio of this to the total number of executors 
-        gives you the resource availability. If none of your executors are available for a prolonged 
-        period of time, consider adding more computers to your Jenkins cluster.
+        gives you the resource availability. If none of your executors are available for a prolonged period of time, consider adding more computers to your Jenkins cluster.
       - **Queue length**
         This is the number of jobs that are in the build queue, waiting for an available 
         executor (of this computer, of this label, or in this Jenkins, respectively). This doesn't 
@@ -719,10 +718,10 @@ the system property `hudson.model.DirectoryBrowserSupport.CSP:`
 
 - ```groovy
   steps {
-                 withCredentials([string(credentialsId: 'mytoken', variable: 'TOKEN')]) {
-                 sh 'env | grep TOKEN'
-                 sh 'echo ${TOKEN} > secret-file.txt'
-                 }
+    withCredentials([string(credentialsId: 'mytoken', variable: 'TOKEN')]) {
+      sh 'env | grep TOKEN'
+      sh 'echo ${TOKEN} > secret-file.txt'
+  }
   ```
   - `withCredentials` binds that to a local Pipeline variable called `TOKEN`
   - The single-quotes will cause the secret to be expanded by the shell as an environment variable. 
@@ -796,7 +795,7 @@ Privacy and Credentials:
   ```bash
   #!/bin/bash
 
-  # Exit immediately if a pipeline retur
+  # Exit immediately if a pipeline return
   set -e
 
   # Treat unset variables and parameters other than the special
@@ -831,7 +830,7 @@ security roles. By default, the roles are inherited by sub-folders.
 
 ### Lab: Organize Folders and Views
 
-Create a TeamA folder with jenkins-admins and jenkins-developers groups
+Create a `TeamA` folder with jenkins-admins and jenkins-developers groups
   - This object will not inherit the global security security settings, 
   or any permissions from its ancestors. Only permissions explicitly 
   enabled in properties with `Do not inherit permissions from other ACL's` granted.
@@ -868,7 +867,7 @@ Understand how resources are being used before taking actions on it.
 Define Build Logs and System Logs
 
 For metrics:
-  - You can use box metricks, or build time or agent related plugins
+  - You can use box metrics, or build time or agent related plugins
 
 Metric Aggregator is recommended
   - When the metrics-aggregation-plugin is installed, there is a metrics 
@@ -881,7 +880,7 @@ Recover an old configuration and have your backup strategy to include a validati
 
 #### Backup Tools
 - Filesystem snapshots:
-  - faster thanlive backups, supported by Linux Logical Volume Manager(LVM), Solaris ZFS
+  - faster than live backups, supported by Linux Logical Volume Manager(LVM), Solaris ZFS
     - ZFS uses the concept of storage pools to manage physical storage.
       ZFS eliminates volume management altogether. Instead of forcing you 
       to create virtualized volumes, ZFS aggregates devices into a storage pool.
@@ -965,9 +964,7 @@ Scripting allows you to automate routine tasks, bulk updates, and provides effic
 Jenkins Command Line interface is a Java application provided as jenkins-cli.jar downloadable from jenkins,
 which doesn't have to run on Jenkins server
 
-CLI makes an HTTP call to jenkins, discovers the port used for JNLP Agent. CLI attempts TCP/IP connection
-if it fails goes back HTTP-based connection. Execution happens on master, `jenkins-cli.jar` gets
-downloaded locally
+CLI makes an HTTP call to jenkins, discovers the port used for JNLP Agent. CLI attempts TCP/IP connection if it fails goes back HTTP-based connection. Execution happens on master, `jenkins-cli.jar` gets downloaded locally
 
 #### CLI Authentication
 
