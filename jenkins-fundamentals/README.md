@@ -22,9 +22,9 @@ Continuous Deployment
 
 #### Types of testing 
   - Unit tests - test a small piece of code 
-   - a function or method or command
+    - a function or method or command
   - Integration tests - Validate integration between multiple sub-systems
-   - including external sub-systems like a database
+    - including external sub-systems like a database
   - Smoke tests - validates basic functions of the system
   - Functional tests - validate the normal software behavior against the expectations and requirements
   - Non-regression tests - validate that the system still produces the same end result
@@ -172,6 +172,13 @@ For Example:
 
 - **Service Lifecycle**
   - Managing options used to `/start/stop/reload`
+    - Reload Configuration from Disk
+      - Read Configuration again from `$JENKINS_HOME` without Jenkins restart
+    - Prepare for Shutdown
+      - Prevents new jobs from starting, waits for running jobs to complete
+
+- **Manage Old Datas**
+  - Helps to take care of dropped configurations items after an upgrade
 
 ### Install Maven lab notes learned the hard way
 
