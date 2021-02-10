@@ -218,12 +218,12 @@ bloated with functionality you don't need.
   - Enabled - Check mark indicates that the plugin is enabled
     - Greyed out check marks indicate plugins that are required by other plugins 
     *(Always thought they were plugins installed/updated by Jenkins/Cloudbees by default)*
+  - Lines with no "Uninstall button are for plugins that are required by other plugins"
 - Uninstall a plugin:
   - Removes the plugin binary(hpi or jpi extension) from the disk
   - Does not remove the configuration that the plugin may have created 
-    - If the plugin contributed extensions to any job/build/views/agents etc, Jenkins reports unrecognized
-    fragments in config files
-    - Until you remove the config file (config.xml) you can re-install the plugin and restart 
+    - If the plugin contributed extensions to any job/build/views/agents etc, Jenkins reports       unrecognized fragments in config files
+    - Until you remove the config file (`config.xml`) you can re-install the plugin and restart 
     jenkins to restore the configurations.
 - Disable a plugin:
   - softer way to retire a plugin, usually binary is changed to jpi/hpi.disabled
@@ -244,7 +244,7 @@ bloated with functionality you don't need.
         *Implied*
         Trilead API ≥ 1.0.4
         ```
-  - Some plugins requie
+  - Some plugins require a Jenkins restart before they can be run
 
 Note on Implied plugins:
   - ```
