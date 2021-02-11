@@ -263,10 +263,10 @@ Chuck Norris Plugin
 - Upload the hpi file, then restart jenkins fom Update Center
 
 Ways to install PLugins:
-  - https://github.com/jenkinsci/docker#preinstalling-plugins -jenkins docker image 
+  - [preinstalling plugins](https://github.com/jenkinsci/docker#preinstalling-plugins) -jenkins docker image 
   provides a script that fetches the plugins
 
-  - https://github.com/jenkinsci/custom-war-packager - which allows you to package your
+  - [custom war package](https://github.com/jenkinsci/custom-war-packager) - which allows you to package your
   own plugins. Custom WAR Packager (CWP) allows building ready-to-fly Jenkins packages using 
   a YAML specification. The tool can produce Docker images, WAR files, and Jenkinsfile Runner 
   docker images (aka single-shot Jenkins masters).
@@ -299,7 +299,6 @@ Distrubuted builds run on nodes instead of master node.
     - Distributed Builds:
       - Master - serves the http request and stores all important information `/var/lib/jenkins/workspace/...`
       - Advantages of distributed builds - `${JENKINS_HOME}` is proected, and makes the instance more reliable
-      - 
     - Distributed Build agents:
       - Uses `slave.jar` file
       - on your browser at `jnlpJars/slave.jar` under `$JENKINS_URL`
