@@ -248,7 +248,12 @@ bloated with functionality you don't need.
 
 Note on Implied plugins:
   - ```
-    **Prefer releases that no longer result in implied plugin dependencies.** Sometimes Jenkins core features are moved into plugins, and any plugin with a dependency on an older core release will have an implied dependency on the new plugin. This makes plugin management more difficult for administrators, so core dependencies should ideally be chosen so that there are no, or few, implied dependencies. See details on **jenkins split-plugins.txt**. At this time, a dependency on Jenkins versions newer than 2.184 will not result in such implied dependencies.
+    **Prefer releases that no longer result in implied plugin dependencies.** Sometimes Jenkins core
+    features are moved into plugins, and any plugin with a dependency on an older core release will
+    have an implied dependency on the new plugin. This makes plugin management more difficult for
+    administrators, so core dependencies should ideally be chosen so that there are no, or few,
+    implied dependencies. See details on **jenkins split-plugins.txt**. At this time, a dependency
+    on Jenkins versions newer than 2.184 will not result in such implied dependencies.
     ```
 #### Manual Plugin installation
 
