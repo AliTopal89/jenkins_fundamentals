@@ -717,8 +717,18 @@ the system property `hudson.model.DirectoryBrowserSupport.CSP:`
 - Credentials Type/Kind:
   - **Secret Text**:
     - MYVARNAME contains the path of the file with secret text, i.e NFS_SERVER_IP, TEAMS_WEBHOOK_URL
+  - **Secret File**:
+    - Essentially content of a secret but in a file
   - **Standard username and password**:
     - MYVARNAME is set to `<username>:<password>` or `MYVARNAME_USR` & `MYVARNAME_PSW`
+  - **Certificate**:
+    - This is a #PKCS12 cert file and password if needed, if you need to connect to something
+      for authentication for example.
+  - **SSH Username and Key**:
+    - SSH username and its associated private key
+  - **Docker Host & Auth**:
+    - Used for access to Docker daemon, have jenkins access the docker api.
+
 - Each `credential` type supported for the `environment` directive, must be supported in the credential
   binding plugin and have a special handler in Declarative Pipeline
 
@@ -734,6 +744,9 @@ the system property `hudson.model.DirectoryBrowserSupport.CSP:`
     The double-quotes are potentially less secure as the secret is interpolated by Groovy, 
     and so typical operating system process listings (as well as Blue Ocean, and the 
     pipeline steps tree in the classic UI) will accidentally disclose it.
+
+##### Notes:
+- Docker Daemon: A persistent background process that manages Docker images, containers, networks, and storage volumes.
 
 ### Lab: Enable Jenkins security
 
