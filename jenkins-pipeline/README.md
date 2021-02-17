@@ -156,6 +156,15 @@ Blue Ocean by default saves to the branch last used in this case `simple-pipelin
 An `artifact` is a file produced as a result of a Jenkins build. By default they are stored
 where they are created so they are deleted when the workspace gets wiped out, unless it gets archived.
 
+ - Artifacts:
+   - Data Related to a Build:
+     - Data related to a build or created as a side effect of a build can be represented as an artifact
+   - Belong to a Single Build:
+     - Artifacts belong to the build that generated them. An artifact can only belong to one build but one build 
+       can have multiple artifacts.
+   - Can be Archived:
+     - This process stores the artifact outside of the workspace. This prevents the artifact from being removed when the workspace is cleaned.
+
 Jobs can be configured to archive artifacts based o filename patterns and are kept forever unless there
 is a retention policy to delete them periodically. 
 
@@ -163,7 +172,7 @@ is a retention policy to delete them periodically.
 - Requires a pattern `like my-app.zip`, `images/.*png`, `target/**/*.jar` 
 - Archiving keeps those files in `${JENKINS_HOME}` forever unless you have a retention policy to delete them.
 
-A fingerprint is the mD5 checksum of an artifact. 
+A `fingerprint` is the mD5 checksum of an artifact. 
 Jenkins uses Fingerprints to keep track of artifacts without any ambiguity
 
 - Archive the Artifacts on blue ocean with adding `Archive the Artifacts` step and type `target/*.jar`
