@@ -530,7 +530,7 @@ pipeline {
 
 #### Notifications
 
-Email & Slack notifications for when a build starts and succeeds or fails.
+Email & Slack notifications: for when a build starts and succeeds or fails.
 sample notifications come with build url, job name and build id, but you can
 add any global environment variables to notifications for additiona information.
 
@@ -547,6 +547,18 @@ post {
     }
 }
 ```
+System Updates and maintenance: if when you need to stop jenkins and swap war file for a major jenkins version update, you can safe exit and then safe restart if need be
+
+```
+  <jenkins.server.url>/restart - This restarts the Jenkins instance.
+  <jenkins.server.url>/safeRestart - Puts Jenkins into the quiet mode, wait for existing builds to be completed, and then restart Jenkins
+  <jenkins.server.url>/exit - stops the java process that is running Jenkins, this allows the Jenkins service to be stopped
+  <jenkins.server.url>/safeExit - Puts Jenkins into the quiet mode, wait for existing builds to be completed, and then shut down Jenkins
+```
+
+Also, you can put in a System message from main global manage Jenkins page to notify on the GUI that there will be a 
+system outage, which shows the message in jenkins dashboard view (jenkins landing page)
+
 #### When Directive
 
 Supports nested conditions(`not`, `allOf`, or `anyOf`) that mut be met for a pipeline to execute a `stage`.
