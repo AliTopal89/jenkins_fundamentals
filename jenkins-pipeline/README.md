@@ -73,10 +73,11 @@ Both definitions are stored in a jenkinsfile under SCM (pipeline-as-code)
 Both can use steps to build into pipeline or provided in plugins
 Both support shared libraries
  - Scripted Pipeline:
+   - are enclosed in a Node block `node {...}`
    - Executed sequentially from top to bottom
    - Limitations are groovy lang limitations
  - Declarative Pipeline
-   - Stricter, pre-defined structure
+   - Stricter, pre-defined structure, you have to define `stages{}` in a very specific way
    - Execution may resume after interruptions
    - Using blue ocean simplifies the pipeline creation even more
    - Use the `script` step to include bits of code when you need capabilites beyond declarative syntax
@@ -264,11 +265,11 @@ When needed, the Snippet Generator provides forms/checklists where you provide a
 
 #### Multibranch
 
-Jenkins creaetes a subproject for each branch in SCM repo.
-Recommended for all new pipelines because, 
+Jenkins creates a subproject for each branch in SCM repo. Jenkins scans each branch that has a Jenkinsfile and then run those builds. Recommended for all new pipelines because,
+
   - automatic workflow creation for each new branch in the repo
   - Builds are specific to that branch, its unique SCM change and build history
-  - Automatic prunning/deleteion for branches deleted in scm repo.
+  - Automatic prunning/deletion for branches deleted in scm repo.
   - Ability to override the parent properties for a specific branch if necessary such as:
     - `$class PipelineProperty` - Configure a task name and which stage the project 
     should be grouped by in the delivery pipeline view.

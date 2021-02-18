@@ -732,7 +732,7 @@ Uses of Sequential Stages:
 1. [Extending with Shared Libraries](https://www.jenkins.io/doc/book/pipeline/shared-libraries/)
 1. [Java Class GStringEngine](http://docs.groovy-lang.org/docs/groovy-2.4.9/html/gapi/groovy/text/GStringTemplateEngine.html)
 1. [Making your own DSL plugin with Pipelines](https://www.jenkins.io/blog/2016/04/21/dsl-plugins/)
-1. [Scaling Pipeline](https://www.jenkins.io/doc/book/pipeline/scaling-pipeline/
+1. [Scaling Pipeline](https://www.jenkins.io/doc/book/pipeline/scaling-pipeline/)
 1. [Garbage Collection Tuning](https://www.jenkins.io/blog/2016/11/21/gc-tuning/)
 1. [Jenkins Security](https://www.jenkins.io/doc/developer/security/)
 1. [Do not disable groovy sandbox](https://brokenco.de/2017/08/03/donut-disable-groovy-sandbox.html)
