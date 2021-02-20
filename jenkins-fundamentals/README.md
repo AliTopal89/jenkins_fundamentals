@@ -209,7 +209,7 @@ I was able to do maven project and free-style job works just fine.
    sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key \
    sudo yum install -y jenkins \
    sudo systemctl enable jenkins \
-   sudo systemctl start jenkins \ 
+   sudo systemctl start jenkins \
    sudo cat /var/lib/jenkins/secrets/initialAdminPassword \
    copy paste the onetime password \
    use the username password and email combo because if you skip it \
@@ -308,7 +308,7 @@ Ways to install PLugins:
 
 Distrubuted builds run on nodes instead of master node. 
   - The Jenkins master is webserver that also acts as a brain for deciding how/when/where to run tasks
-  - A `node` is a server whre Jenkins runs jobs for `executors`.
+  - A `node` is a server where Jenkins runs jobs for `executors`.
   - The `agent` is the tool that manages executors on remote node.
   - Jenkins Master
     - Files written when a pipeline executes, are written to the filesystem on the master 
@@ -318,7 +318,7 @@ Distrubuted builds run on nodes instead of master node.
     - A `node` is taken offline if Disk Space, free swap etc. go outside the configured threshold.
     - Distributed Builds:
       - Master - serves the http request and stores all important information `/var/lib/jenkins/workspace/...`
-      - Advantages of distributed builds - `${JENKINS_HOME}` is proected, and makes the instance more reliable
+      - Advantages of distributed builds - `${JENKINS_HOME}` is protected, and makes the instance more reliable
     - Distributed Build agents:
       - Uses `slave.jar` file
       - on your browser at `jnlpJars/slave.jar` under `$JENKINS_URL`
@@ -522,6 +522,14 @@ Configure Global Security -> Realm: Jenkins own user database ->
      allows additional access control lists (ACLs) to be defined for each project 
      separately in the Project configuration screen. This allows granting specific 
      users or groups access only to specified projects, instead of all projects in the Jenkins environment.
+
+#### Notes:
+  - Explicit Allow: means that if allow is not granted, then deny is assumed
+  - Explicit Deny: allows the user to be blocked from performing an action,
+    jenkins doesn't have explicit deny, users are blocked by not having the permissions
+    
+    if you assign a user to a role, you get all the permissions assigned to that role, you cannot explicity deny a single permission
+  - Inheritance: when an object that is considered to be the child of another object (contained within that object) contains the same permissions as the object that is its parent (the object's container)
 
 ##### Accounting
 
