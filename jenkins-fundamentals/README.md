@@ -197,6 +197,26 @@ Notes: You may have to install jenkins.war, from jenkins upgrades lecture.
 I didn't install the jenkins.war file from that lecture at first, once I installed that `java -jar ~/Downloads/jenkins.war httpListenAddress=http://localhost:5000/jenkins/`
 I was able to do maven project and free-style job works just fine. 
 
+#### Installation notes
+
+<details>
+  <summary>yum install jenkins lab </summary>
+  
+   sudo yum install -y java-1.8.0-openjdk-devel\
+   which wget \
+   sudo yum install -y wget \
+   sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo \
+   sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key \
+   sudo yum install -y jenkins \
+   sudo systemctl enable jenkins \
+   sudo systemctl start jenkins \ 
+   sudo cat /var/lib/jenkins/secrets/initialAdminPassword \
+   copy paste the onetime password \
+   use the username password and email combo because if you skip it \
+      - its going to use the default admin user and password which is the password from startup logs   
+      - which may be a security issue  
+</details>
+
 
 ### Jenkins Plugins
 
