@@ -94,7 +94,7 @@ You can use a subset of the top-level options content in a stage’s `options` -
 
 - with the same parameters as the input step. When you use the stage input directive rather than using the step directly, any parameters you’ve specified for the input will be made available in the stage’s `environment`, meaning you can reference parameters from the `input` in `when` conditions, or in `environment` variables.
 
-### Using Docker wth Pipeline
+### Using Docker with Pipeline
 
 #### Caching Data for Containers
 

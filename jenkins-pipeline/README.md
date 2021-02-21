@@ -212,8 +212,30 @@ environment {
 #### Parallel Stages
 
 Each parallelized branch is a stage
-- a stage can either have `steps` or `parallel` at the top level but not both at top level
-- a stage within a `parallel` stage can contain `agent` and `steps` sections
+- a `stage` can either have `steps` or `parallel` at the top level but not both at top level
+  - ```groovy
+      stages {
+        stage('Fluffy Build') {
+          steps {
+            sh './jenkins/build.sh'
+            //...
+        // not both at top level
+        stage('Fluffy Test') {
+          parallel {
+            stage('Backend') {
+              steps {
+                sh './jen..
+    ```
+- a `stage` within a `parallel` stage can contain `agent` and `steps` sections
+  - ```groovy
+      stage('Fluffy Build') {
+      parallel {
+        stage('Build Java 7') {
+          agent {
+            node {
+              label 'java7'
+            }
+    ```
 - a `parallel` stage cannot contain `agents` or `tools` 
 
 Add `failFast true` to force all parallel process to abort if one fails. 

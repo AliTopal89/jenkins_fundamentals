@@ -613,6 +613,7 @@ Auditing
 ### Global Security Settings
 
 Global Security Settings close off intrusion paths to Jenkins instance
+
 **Access Control for Builds**
   - Similar to access control for users, builds in Jenkins run with an 
   associated user authorization. By default, builds run as the internal 
