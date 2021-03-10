@@ -1,1 +1,1 @@
-![Jenkins Engineer 2021](/Users/alitopaloglu/Downloads/161470912316.png)
+![Jenkins Engineer 2021](../pipeline-exercise/jenkins.png)
